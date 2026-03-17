@@ -436,13 +436,11 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header" id="cmpChartTitle">Build Time — Comparison</div>
-                <div class="chart-wrapper" style="height:520px;">
-                    <canvas id="cmpChart"></canvas>
-                </div>
+                <div class="card-header" id="cmpSummaryTitle">Summary</div>
+                <div class="stats-bar" id="cmpStatsBar"></div>
             </div>
             <div class="card">
-                <div class="card-header">Delta Table</div>
+                <div class="card-header" id="cmpTableTitle">Results</div>
                 <div class="table-wrapper" id="cmpTableContainer"></div>
             </div>
         </div>
@@ -790,113 +788,58 @@
             });
         });
 
-        const cmpCtx = document.getElementById('cmpChart').getContext('2d');
-        let cmpChart = null;
-
         function renderComparison() {
             const brA = cmpBranchA.value, bidA = cmpBuildA.value;
             const brB = cmpBranchB.value, bidB = cmpBuildB.value;
             const metric = cmpMetric;
             const metricLabel = metric === 'buildTime' ? 'Build Time' : 'Eval Time';
 
-            document.getElementById('cmpChartTitle').textContent = `${metricLabel} — ${brA}/${bidA} vs ${brB}/${bidB}`;
+            document.getElementById('cmpSummaryTitle').textContent = `${metricLabel} — Summary`;
+            document.getElementById('cmpTableTitle').textContent = `${metricLabel} — ${brA} (${bidA}) vs ${brB} (${bidB})`;
 
             const recsA = (idx[brA]?.[bidA] || []);
             const recsB = (idx[brB]?.[bidB] || []);
 
-            // Build lookup: test -> machine -> value
             const lookA = {}, lookB = {};
             recsA.forEach(r => { if (!lookA[r.test]) lookA[r.test] = {}; lookA[r.test][r.machine] = r[metric]; });
             recsB.forEach(r => { if (!lookB[r.test]) lookB[r.test] = {}; lookB[r.test][r.machine] = r[metric]; });
 
-            // Union of tests, sorted
             const tests = [...new Set([...Object.keys(lookA), ...Object.keys(lookB)])].sort();
-            // Union of machines across both
             const machines = [...new Set([...recsA.map(r => r.machine), ...recsB.map(r => r.machine)])].sort();
 
-            // Build chart data: grouped bar chart, one group per test×machine
-            const labels = [];
-            const valuesA = [];
-            const valuesB = [];
             const tableRows = [];
-
             tests.forEach(test => {
                 machines.forEach(machine => {
                     const vA = lookA[test]?.[machine] ?? null;
                     const vB = lookB[test]?.[machine] ?? null;
                     if (vA === null && vB === null) return;
-                    labels.push(`${test}\n(${machine})`);
-                    valuesA.push(vA);
-                    valuesB.push(vB);
                     const delta = (vA != null && vB != null) ? vB - vA : null;
                     const deltaPct = (vA != null && vB != null && vA !== 0) ? ((vB - vA) / vA * 100) : null;
                     tableRows.push({ test, machine, vA, vB, delta, deltaPct });
                 });
             });
 
-            if (cmpChart) cmpChart.destroy();
-            const colors = getChartColors();
+            // Summary stats
+            const withDelta = tableRows.filter(r => r.deltaPct != null);
+            const regressions = withDelta.filter(r => r.deltaPct > 1);
+            const improvements = withDelta.filter(r => r.deltaPct < -1);
+            const unchanged = withDelta.filter(r => Math.abs(r.deltaPct) <= 1);
+            const avgDelta = withDelta.length > 0
+                ? withDelta.reduce((sum, r) => sum + r.deltaPct, 0) / withDelta.length : 0;
 
-            cmpChart = new Chart(cmpCtx, {
-                type: 'bar',
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: `A: ${brA} (${bidA})`,
-                            data: valuesA,
-                            backgroundColor: 'rgba(88,166,255,0.7)',
-                            borderColor: '#58a6ff',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        },
-                        {
-                            label: `B: ${brB} (${bidB})`,
-                            data: valuesB,
-                            backgroundColor: 'rgba(188,140,255,0.7)',
-                            borderColor: '#bc8cff',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: { duration: 400 },
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        tooltip: {
-                            backgroundColor: 'rgba(22,27,34,0.95)',
-                            titleColor: '#e6edf3', bodyColor: '#e6edf3',
-                            borderColor: '#30363d', borderWidth: 1,
-                            cornerRadius: 8, padding: 12,
-                            callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1) ?? '—'} ms` }
-                        },
-                        legend: {
-                            position: 'top',
-                            labels: { font: { size: 13, weight: '600' }, padding: 16, color: colors.text },
-                        },
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                color: colors.text,
-                                font: { size: 10 },
-                                maxRotation: 90,
-                                autoSkip: false,
-                            },
-                            grid: { display: false },
-                        },
-                        y: {
-                            title: { display: true, text: `${metricLabel} (ms)`, color: colors.text, font: { weight: '600' } },
-                            beginAtZero: false,
-                            grid: { color: colors.grid },
-                            ticks: { color: colors.text },
-                        }
-                    }
-                }
-            });
+            const statsBar = document.getElementById('cmpStatsBar');
+            if (withDelta.length > 0) {
+                const avgCls = avgDelta > 0.5 ? 'delta-pos' : avgDelta < -0.5 ? 'delta-neg' : 'delta-zero';
+                const avgSign = avgDelta > 0 ? '+' : '';
+                statsBar.innerHTML = `
+                    <div class="stat"><div class="stat-value" style="color:var(--danger)">${regressions.length}</div><div class="stat-label">Regressions</div></div>
+                    <div class="stat"><div class="stat-value" style="color:var(--success)">${improvements.length}</div><div class="stat-label">Improvements</div></div>
+                    <div class="stat"><div class="stat-value" style="color:var(--text-subtle)">${unchanged.length}</div><div class="stat-label">Unchanged</div></div>
+                    <div class="stat"><div class="stat-value ${avgCls}">${avgSign}${avgDelta.toFixed(1)}%</div><div class="stat-label">Avg Δ%</div></div>
+                    <div class="stat"><div class="stat-value">${withDelta.length}</div><div class="stat-label">Tests Compared</div></div>`;
+            } else {
+                statsBar.innerHTML = '';
+            }
 
             // Delta table
             const container = document.getElementById('cmpTableContainer');
@@ -905,10 +848,18 @@
                 return;
             }
 
+            // Sort by delta % descending (biggest regressions first)
+            tableRows.sort((a, b) => {
+                if (a.deltaPct == null && b.deltaPct == null) return 0;
+                if (a.deltaPct == null) return 1;
+                if (b.deltaPct == null) return -1;
+                return b.deltaPct - a.deltaPct;
+            });
+
             let html = `<table><thead><tr>
                 <th>Test</th><th>Machine</th>
-                <th>A (${brA} ${bidA})</th>
-                <th>B (${brB} ${bidB})</th>
+                <th>A: ${brA} (${bidA})</th>
+                <th>B: ${brB} (${bidB})</th>
                 <th>Δ (ms)</th><th>Δ %</th>
             </tr></thead><tbody>`;
 
@@ -920,7 +871,7 @@
                     const sign = row.delta > 0 ? '+' : '';
                     fmtDelta = `${sign}${row.delta.toFixed(1)}`;
                     fmtPct = `${sign}${row.deltaPct.toFixed(1)}%`;
-                    cls = row.delta > 0.5 ? 'delta-pos' : row.delta < -0.5 ? 'delta-neg' : 'delta-zero';
+                    cls = row.deltaPct > 1 ? 'delta-pos' : row.deltaPct < -1 ? 'delta-neg' : 'delta-zero';
                 }
                 html += `<tr>
                     <td>${row.test}</td><td>${row.machine}</td>

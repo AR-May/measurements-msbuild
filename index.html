@@ -55,16 +55,38 @@
             padding: 28px 32px;
             color: #fff;
         }
-        header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
+        header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
+        header p { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+
+        /* View tabs */
+        .view-tabs {
+            display: flex;
+            gap: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
         }
-        header p {
+        .view-tab {
+            padding: 12px 24px;
             font-size: 14px;
-            opacity: 0.85;
-            margin-top: 4px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
         }
+        .view-tab:hover { color: var(--text); }
+        .view-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .view-container { display: none; }
+        .view-container.active { display: block; }
+
+        /* Layout */
         .layout {
             display: flex;
             max-width: 1440px;
@@ -103,6 +125,8 @@
             background: var(--surface-raised);
         }
         .card-body { padding: 16px; }
+
+        /* Controls */
         .metric-toggle {
             display: flex;
             gap: 8px;
@@ -121,16 +145,24 @@
             transition: all 0.2s ease;
             text-align: center;
         }
-        .metric-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+        .metric-btn:hover { border-color: var(--accent); color: var(--accent); }
         .metric-btn.active {
             background: var(--accent);
             border-color: var(--accent);
             color: #fff;
             box-shadow: 0 2px 8px rgba(88,166,255,0.3);
         }
+        select.control-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+        }
+        select.control-select:focus { border-color: var(--accent); }
         .search-box {
             padding: 0 16px 12px;
         }
@@ -161,10 +193,7 @@
             cursor: pointer;
             transition: all 0.15s;
         }
-        .test-list-actions button:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+        .test-list-actions button:hover { border-color: var(--accent); color: var(--accent); }
         .test-list-scroll {
             max-height: 400px;
             overflow-y: auto;
@@ -176,10 +205,7 @@
         .test-list {
             list-style: none;
         }
-        .test-list li {
-            padding: 4px 16px;
-            transition: background 0.1s;
-        }
+        .test-list li { padding: 4px 16px; transition: background 0.1s; }
         .test-list li:hover { background: var(--surface-raised); }
         .test-list li.hidden { display: none; }
         .test-list label {
@@ -190,11 +216,9 @@
             cursor: pointer;
         }
         .test-list input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 16px; height: 16px;
             accent-color: var(--accent);
-            cursor: pointer;
-            flex-shrink: 0;
+            cursor: pointer; flex-shrink: 0;
         }
         .badge {
             display: inline-block;
@@ -222,24 +246,14 @@
             flex-wrap: wrap;
         }
         .stat {
-            flex: 1;
-            min-width: 120px;
-            text-align: center;
+            flex: 1; min-width: 120px; text-align: center;
         }
-        .stat-value {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--accent);
-        }
+        .stat-value { font-size: 22px; font-weight: 700; color: var(--accent); }
         .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 11px; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .table-wrapper {
-            overflow-x: auto;
-        }
+        .table-wrapper { overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -253,14 +267,10 @@
         }
         th {
             background: var(--surface-raised);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            font-weight: 600; font-size: 12px;
+            text-transform: uppercase; letter-spacing: 0.3px;
             color: var(--text-muted);
-            position: sticky;
-            top: 0;
-            z-index: 1;
+            position: sticky; top: 0; z-index: 1;
         }
         th:first-child, td:first-child { text-align: left; }
         tr:hover td { background: var(--surface-raised); }
@@ -272,9 +282,70 @@
             font-size: 15px;
         }
         .empty-state .icon { font-size: 48px; margin-bottom: 12px; display: block; }
+        .delta-pos { color: var(--danger); }
+        .delta-neg { color: var(--success); }
+        .delta-zero { color: var(--text-subtle); }
+
+        /* Comparison layout */
+        .compare-layout {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .compare-controls {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .compare-side {
+            flex: 1;
+            min-width: 280px;
+        }
+        .compare-side h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .side-indicator {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border-radius: 3px;
+        }
+        .side-a { background: var(--accent); }
+        .side-b { background: var(--purple); }
+        .compare-selects {
+            display: flex;
+            gap: 8px;
+        }
+        .compare-selects select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+        }
+        .compare-metric {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .compare-metric .metric-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
         @media (max-width: 900px) {
             .layout { flex-direction: column; }
             .sidebar { flex: none; }
+            .compare-controls { flex-direction: column; }
         }
     </style>
 </head>
@@ -283,40 +354,96 @@
         <h1>📊 MSBuild Performance Dashboard</h1>
         <p>Historical build and evaluation time measurements</p>
     </header>
-    <div class="layout">
-        <aside class="sidebar">
-            <div class="card">
-                <div class="card-header">Metric</div>
-                <div class="metric-toggle">
-                    <button class="metric-btn active" data-metric="buildTime">⏱ Build Time</button>
-                    <button class="metric-btn" data-metric="evalTime">📐 Eval Time</button>
+
+    <div class="view-tabs">
+        <button class="view-tab active" data-view="overview">Overview</button>
+        <button class="view-tab" data-view="comparison">Comparison</button>
+    </div>
+
+    <!-- ==================== OVERVIEW VIEW ==================== -->
+    <div class="view-container active" id="view-overview">
+        <div class="layout">
+            <aside class="sidebar">
+                <div class="card">
+                    <div class="card-header">Branch</div>
+                    <div class="card-body">
+                        <select class="control-select" id="branchSelect"></select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Metric</div>
+                    <div class="metric-toggle" id="overviewMetricToggle">
+                        <button class="metric-btn active" data-metric="buildTime">⏱ Build Time</button>
+                        <button class="metric-btn" data-metric="evalTime">📐 Eval Time</button>
+                    </div>
+                </div>
+                <div class="card" style="flex:1; display:flex; flex-direction:column;">
+                    <div class="card-header">Tests</div>
+                    <div class="search-box" style="padding-top:12px;">
+                        <input type="text" id="testSearch" placeholder="Filter tests…">
+                    </div>
+                    <div class="test-list-actions">
+                        <button id="btnSelectAll">Select All</button>
+                        <button id="btnSelectNone">Clear</button>
+                    </div>
+                    <div class="test-list-scroll">
+                        <ul class="test-list" id="testList"></ul>
+                    </div>
+                </div>
+            </aside>
+            <div class="main">
+                <div class="card">
+                    <div class="card-header" id="chartTitle">Build Time — Trend</div>
+                    <div class="chart-wrapper">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                    <div class="stats-bar" id="statsBar"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Data</div>
+                    <div class="table-wrapper" id="overviewTableContainer"></div>
                 </div>
             </div>
-            <div class="card" style="flex:1; display:flex; flex-direction:column;">
-                <div class="card-header">Tests</div>
-                <div class="search-box" style="padding-top:12px;">
-                    <input type="text" id="testSearch" placeholder="Filter tests…">
-                </div>
-                <div class="test-list-actions">
-                    <button id="btnSelectAll">Select All</button>
-                    <button id="btnSelectNone">Clear</button>
-                </div>
-                <div class="test-list-scroll">
-                    <ul class="test-list" id="testList"></ul>
+        </div>
+    </div>
+
+    <!-- ==================== COMPARISON VIEW ==================== -->
+    <div class="view-container" id="view-comparison">
+        <div class="compare-layout">
+            <div class="card">
+                <div class="card-header">Compare Snapshots</div>
+                <div class="card-body">
+                    <div class="compare-controls">
+                        <div class="compare-side">
+                            <h3><span class="side-indicator side-a"></span> Baseline (A)</h3>
+                            <div class="compare-selects">
+                                <select id="cmpBranchA"></select>
+                                <select id="cmpBuildA"></select>
+                            </div>
+                        </div>
+                        <div class="compare-side">
+                            <h3><span class="side-indicator side-b"></span> Candidate (B)</h3>
+                            <div class="compare-selects">
+                                <select id="cmpBranchB"></select>
+                                <select id="cmpBuildB"></select>
+                            </div>
+                        </div>
+                        <div class="compare-metric" id="cmpMetricToggle">
+                            <button class="metric-btn active" data-metric="buildTime">⏱ Build</button>
+                            <button class="metric-btn" data-metric="evalTime">📐 Eval</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </aside>
-        <div class="main">
             <div class="card">
-                <div class="card-header" id="chartTitle">Build Time — Trend</div>
-                <div class="chart-wrapper">
-                    <canvas id="chart"></canvas>
+                <div class="card-header" id="cmpChartTitle">Build Time — Comparison</div>
+                <div class="chart-wrapper" style="height:520px;">
+                    <canvas id="cmpChart"></canvas>
                 </div>
-                <div class="stats-bar" id="statsBar"></div>
             </div>
             <div class="card">
-                <div class="card-header">Data</div>
-                <div class="table-wrapper" id="tableContainer"></div>
+                <div class="card-header">Delta Table</div>
+                <div class="table-wrapper" id="cmpTableContainer"></div>
             </div>
         </div>
     </div>
@@ -324,19 +451,33 @@
     <script>
     (async function() {
         const resp = await fetch('data.json');
-        const data = await resp.json();
+        const allData = await resp.json();
 
-        const testNames = [...new Set(data.map(r => r.test))].sort();
-        const machines = [...new Set(data.map(r => r.machine))].sort();
+        // Derived collections
+        const branches = [...new Set(allData.map(r => r.branch))].sort((a, b) => {
+            if (a === 'main') return -1;
+            if (b === 'main') return 1;
+            return a.localeCompare(b);
+        });
+        const allMachines = [...new Set(allData.map(r => r.machine))].sort();
 
-        // Build a set of which machines each test has data for
-        const testMachines = {};
-        data.forEach(r => {
-            if (!testMachines[r.test]) testMachines[r.test] = new Set();
-            testMachines[r.test].add(r.machine);
+        // Index: branch -> buildId -> array of records
+        const idx = {};
+        allData.forEach(r => {
+            if (!idx[r.branch]) idx[r.branch] = {};
+            if (!idx[r.branch][r.buildId]) idx[r.branch][r.buildId] = [];
+            idx[r.branch][r.buildId].push(r);
         });
 
-        // Rich color palette
+        function buildIdsForBranch(branch) {
+            return Object.keys(idx[branch] || {}).sort();
+        }
+
+        function testsForBranch(branch) {
+            const recs = allData.filter(r => r.branch === branch);
+            return [...new Set(recs.map(r => r.test))].sort();
+        }
+
         const PALETTE = [
             '#58a6ff', '#3fb950', '#f0883e', '#bc8cff', '#f778ba',
             '#79c0ff', '#56d364', '#d29922', '#db61a2', '#a5d6ff',
@@ -344,108 +485,136 @@
             '#54aeff', '#e3b341', '#2da44e', '#cf222e', '#8250df',
         ];
 
-        let activeMetric = 'buildTime';
+        function parseDate(buildId) {
+            const ds = buildId.split('.')[0];
+            const y = parseInt(ds.substring(0, 4));
+            const m = parseInt(ds.substring(4, 6)) - 1;
+            const d = parseInt(ds.substring(6, 8));
+            return new Date(y, m, d);
+        }
 
-        // Metric toggle
-        document.querySelectorAll('.metric-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                activeMetric = btn.dataset.metric;
-                render();
+        function formatBuildId(buildId) {
+            const dt = parseDate(buildId);
+            const seq = buildId.split('.')[1];
+            return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ` (#${seq})`;
+        }
+
+        function getChartColors() {
+            const style = getComputedStyle(document.documentElement);
+            return {
+                grid: style.getPropertyValue('--border').trim() + '40',
+                text: style.getPropertyValue('--text-muted').trim(),
+            };
+        }
+
+        // ==================== VIEW SWITCHING ====================
+        document.querySelectorAll('.view-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('view-' + tab.dataset.view).classList.add('active');
             });
         });
 
-        // Build test checkbox list
-        const testList = document.getElementById('testList');
-        testNames.forEach((name, i) => {
-            const li = document.createElement('li');
-            const label = document.createElement('label');
-            const cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.value = name;
-            if (i === 0) cb.checked = true;
-            cb.addEventListener('change', render);
-            label.appendChild(cb);
-            const span = document.createElement('span');
-            span.textContent = name;
-            label.appendChild(span);
-            // Machine availability badge
-            const tm = testMachines[name];
-            const badge = document.createElement('span');
-            badge.classList.add('badge');
-            if (tm.size === machines.length) {
-                badge.classList.add('badge-both');
-                badge.textContent = 'LIN+WIN';
-            } else if (tm.has('PERFLIN')) {
-                badge.classList.add('badge-lin');
-                badge.textContent = 'LIN';
-            } else {
-                badge.classList.add('badge-win');
-                badge.textContent = 'WIN';
-            }
-            label.appendChild(badge);
-            li.appendChild(label);
-            testList.appendChild(li);
+        // ==================== OVERVIEW ====================
+        const branchSelect = document.getElementById('branchSelect');
+        branches.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            if (b === 'main') opt.selected = true;
+            branchSelect.appendChild(opt);
         });
 
-        // Search filter
+        let overviewMetric = 'buildTime';
+        const overviewMetricBtns = document.querySelectorAll('#overviewMetricToggle .metric-btn');
+        overviewMetricBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                overviewMetricBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                overviewMetric = btn.dataset.metric;
+                renderOverview();
+            });
+        });
+
+        const testList = document.getElementById('testList');
+
+        function rebuildTestList() {
+            testList.innerHTML = '';
+            const branch = branchSelect.value;
+            const tests = testsForBranch(branch);
+            const branchData = allData.filter(r => r.branch === branch);
+            const testMachines = {};
+            branchData.forEach(r => {
+                if (!testMachines[r.test]) testMachines[r.test] = new Set();
+                testMachines[r.test].add(r.machine);
+            });
+
+            tests.forEach((name, i) => {
+                const li = document.createElement('li');
+                const label = document.createElement('label');
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = name;
+                if (i === 0) cb.checked = true;
+                cb.addEventListener('change', renderOverview);
+                label.appendChild(cb);
+                const span = document.createElement('span');
+                span.textContent = name;
+                label.appendChild(span);
+                const tm = testMachines[name] || new Set();
+                const badge = document.createElement('span');
+                badge.classList.add('badge');
+                if (tm.size >= 2) { badge.classList.add('badge-both'); badge.textContent = 'LIN+WIN'; }
+                else if (tm.has('PERFLIN')) { badge.classList.add('badge-lin'); badge.textContent = 'LIN'; }
+                else { badge.classList.add('badge-win'); badge.textContent = 'WIN'; }
+                label.appendChild(badge);
+                li.appendChild(label);
+                testList.appendChild(li);
+            });
+        }
+
+        branchSelect.addEventListener('change', () => {
+            rebuildTestList();
+            renderOverview();
+        });
+
         document.getElementById('testSearch').addEventListener('input', e => {
             const q = e.target.value.toLowerCase();
             testList.querySelectorAll('li').forEach(li => {
-                const text = li.textContent.toLowerCase();
-                li.classList.toggle('hidden', !text.includes(q));
+                li.classList.toggle('hidden', !li.textContent.toLowerCase().includes(q));
             });
         });
 
         document.getElementById('btnSelectAll').addEventListener('click', () => {
             testList.querySelectorAll('li:not(.hidden) input').forEach(cb => cb.checked = true);
-            render();
+            renderOverview();
         });
         document.getElementById('btnSelectNone').addEventListener('click', () => {
             testList.querySelectorAll('input').forEach(cb => cb.checked = false);
-            render();
+            renderOverview();
         });
 
-        const ctx = document.getElementById('chart').getContext('2d');
-        let chart = null;
+        const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+        let overviewChart = null;
 
-        function parseDate(dateStr) {
-            const y = parseInt(dateStr.substring(0, 4));
-            const m = parseInt(dateStr.substring(4, 6)) - 1;
-            const d = parseInt(dateStr.substring(6, 8));
-            return new Date(y, m, d);
-        }
+        function renderOverview() {
+            const branch = branchSelect.value;
+            const selectedTests = [...testList.querySelectorAll('input:checked')].map(cb => cb.value);
+            const metric = overviewMetric;
+            const metricLabel = metric === 'buildTime' ? 'Build Time' : 'Eval Time';
+            document.getElementById('chartTitle').textContent = `${metricLabel} — ${branch}`;
 
-        function formatDate(dateStr) {
-            const dt = parseDate(dateStr);
-            return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
+            const branchData = allData.filter(r => r.branch === branch && selectedTests.includes(r.test));
+            const buildIds = [...new Set(branchData.map(r => r.buildId))].sort();
+            const machines = [...new Set(branchData.map(r => r.machine))].sort();
 
-        function getSelectedTests() {
-            return [...testList.querySelectorAll('input:checked')].map(cb => cb.value);
-        }
-
-        function getMetricLabel() {
-            return activeMetric === 'buildTime' ? 'Build Time' : 'Eval Time';
-        }
-
-        function render() {
-            const selectedTests = getSelectedTests();
-            const metric = activeMetric;
-            const metricLabel = getMetricLabel();
-
-            document.getElementById('chartTitle').textContent = `${metricLabel} — Trend`;
-
-            const filtered = data.filter(r => selectedTests.includes(r.test));
-            const allDates = [...new Set(filtered.map(r => r.date))].sort();
-
-            // Build lookup: test -> machine -> date -> record
             const lookup = {};
-            filtered.forEach(r => {
+            branchData.forEach(r => {
                 if (!lookup[r.test]) lookup[r.test] = {};
                 if (!lookup[r.test][r.machine]) lookup[r.test][r.machine] = {};
-                lookup[r.test][r.machine][r.date] = r;
+                lookup[r.test][r.machine][r.buildId] = r;
             });
 
             const datasets = [];
@@ -455,21 +624,16 @@
             selectedTests.forEach(test => {
                 machines.forEach(machine => {
                     if (!lookup[test]?.[machine]) return;
-
-                    const seriesData = allDates.map(d => {
-                        const rec = lookup[test]?.[machine]?.[d];
+                    const seriesData = buildIds.map(bid => {
+                        const rec = lookup[test]?.[machine]?.[bid];
                         const val = rec?.[metric] ?? null;
-                        return { x: parseDate(d), y: val };
+                        return { x: parseDate(bid), y: val };
                     }).filter(p => p.y !== null);
-
                     if (seriesData.length === 0) return;
-
                     seriesData.forEach(p => allValues.push(p.y));
-
                     const color = PALETTE[colorIdx % PALETTE.length];
                     const isDashed = machine === machines[1];
                     colorIdx++;
-
                     datasets.push({
                         label: `${test} (${machine})`,
                         data: seriesData,
@@ -489,14 +653,10 @@
                 });
             });
 
-            if (chart) chart.destroy();
+            if (overviewChart) overviewChart.destroy();
+            const colors = getChartColors();
 
-            const gridColor = getComputedStyle(document.documentElement)
-                .getPropertyValue('--border').trim() + '40';
-            const textColor = getComputedStyle(document.documentElement)
-                .getPropertyValue('--text-muted').trim();
-
-            chart = new Chart(ctx, {
+            overviewChart = new Chart(overviewCtx, {
                 type: 'line',
                 data: { datasets },
                 options: {
@@ -507,27 +667,17 @@
                     plugins: {
                         tooltip: {
                             backgroundColor: 'rgba(22,27,34,0.95)',
-                            titleColor: '#e6edf3',
-                            bodyColor: '#e6edf3',
-                            borderColor: '#30363d',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            padding: 12,
+                            titleColor: '#e6edf3', bodyColor: '#e6edf3',
+                            borderColor: '#30363d', borderWidth: 1,
+                            cornerRadius: 8, padding: 12,
                             titleFont: { weight: '600' },
-                            callbacks: {
-                                label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1)} ms`
-                            }
+                            callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1)} ms` }
                         },
                         legend: {
                             position: 'bottom',
                             labels: {
-                                boxWidth: 14,
-                                boxHeight: 14,
-                                borderRadius: 3,
-                                useBorderRadius: true,
-                                font: { size: 12 },
-                                padding: 16,
-                                color: textColor,
+                                boxWidth: 14, boxHeight: 14, borderRadius: 3, useBorderRadius: true,
+                                font: { size: 12 }, padding: 16, color: colors.text,
                             },
                         },
                     },
@@ -535,75 +685,259 @@
                         x: {
                             type: 'time',
                             time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
-                            title: { display: true, text: 'Date', color: textColor, font: { weight: '600' } },
-                            grid: { color: gridColor },
-                            ticks: { color: textColor },
+                            title: { display: true, text: 'Date', color: colors.text, font: { weight: '600' } },
+                            grid: { color: colors.grid }, ticks: { color: colors.text },
                         },
                         y: {
-                            title: { display: true, text: `${metricLabel} (ms)`, color: textColor, font: { weight: '600' } },
+                            title: { display: true, text: `${metricLabel} (ms)`, color: colors.text, font: { weight: '600' } },
                             beginAtZero: false,
-                            grid: { color: gridColor },
-                            ticks: { color: textColor },
+                            grid: { color: colors.grid }, ticks: { color: colors.text },
                         }
                     }
                 }
             });
 
-            // Stats bar
-            updateStats(allValues);
-            updateTable(selectedTests, allDates, machines, lookup, metric);
-        }
-
-        function updateStats(values) {
+            // Stats
             const bar = document.getElementById('statsBar');
-            if (values.length === 0) {
+            if (allValues.length > 0) {
+                const avg = allValues.reduce((a, b) => a + b, 0) / allValues.length;
+                const min = Math.min(...allValues);
+                const max = Math.max(...allValues);
+                bar.innerHTML = `
+                    <div class="stat"><div class="stat-value">${avg.toFixed(0)}</div><div class="stat-label">Average (ms)</div></div>
+                    <div class="stat"><div class="stat-value">${min.toFixed(0)}</div><div class="stat-label">Min (ms)</div></div>
+                    <div class="stat"><div class="stat-value">${max.toFixed(0)}</div><div class="stat-label">Max (ms)</div></div>
+                    <div class="stat"><div class="stat-value">${allValues.length}</div><div class="stat-label">Data Points</div></div>`;
+            } else {
                 bar.innerHTML = '';
-                return;
             }
-            const avg = values.reduce((a, b) => a + b, 0) / values.length;
-            const min = Math.min(...values);
-            const max = Math.max(...values);
-            const latest = values[values.length - 1];
-            bar.innerHTML = `
-                <div class="stat"><div class="stat-value">${avg.toFixed(0)}</div><div class="stat-label">Average (ms)</div></div>
-                <div class="stat"><div class="stat-value">${min.toFixed(0)}</div><div class="stat-label">Min (ms)</div></div>
-                <div class="stat"><div class="stat-value">${max.toFixed(0)}</div><div class="stat-label">Max (ms)</div></div>
-                <div class="stat"><div class="stat-value">${values.length}</div><div class="stat-label">Data Points</div></div>
-            `;
-        }
 
-        function updateTable(selectedTests, dates, machines, lookup, metric) {
-            const container = document.getElementById('tableContainer');
-            if (selectedTests.length === 0 || dates.length === 0) {
+            // Table
+            const container = document.getElementById('overviewTableContainer');
+            if (selectedTests.length === 0 || buildIds.length === 0) {
                 container.innerHTML = '<div class="empty-state"><span class="icon">📈</span>Select one or more tests to view data.</div>';
                 return;
             }
-
-            let html = '<table><thead><tr><th>Date</th>';
+            let html = '<table><thead><tr><th>Build</th>';
             selectedTests.forEach(test => {
                 machines.forEach(m => {
                     html += `<th>${test}<br><small style="font-weight:400;opacity:0.7">${m}</small></th>`;
                 });
             });
             html += '</tr></thead><tbody>';
-
-            dates.forEach(d => {
-                html += `<tr><td>${formatDate(d)}</td>`;
+            buildIds.forEach(bid => {
+                html += `<tr><td>${formatBuildId(bid)}</td>`;
                 selectedTests.forEach(test => {
                     machines.forEach(m => {
-                        const rec = lookup[test]?.[m]?.[d];
+                        const rec = lookup[test]?.[m]?.[bid];
                         const val = rec?.[metric];
                         html += `<td>${val != null ? val.toFixed(1) : '<span style="color:var(--text-subtle)">—</span>'}</td>`;
                     });
                 });
                 html += '</tr>';
             });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // ==================== COMPARISON ====================
+        const cmpBranchA = document.getElementById('cmpBranchA');
+        const cmpBranchB = document.getElementById('cmpBranchB');
+        const cmpBuildA = document.getElementById('cmpBuildA');
+        const cmpBuildB = document.getElementById('cmpBuildB');
+
+        function populateBranchSelect(sel, defaultBranch) {
+            sel.innerHTML = '';
+            branches.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b;
+                opt.textContent = b;
+                if (b === defaultBranch) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
+        function populateBuildSelect(sel, branch) {
+            sel.innerHTML = '';
+            const bids = buildIdsForBranch(branch);
+            bids.forEach((bid, i) => {
+                const opt = document.createElement('option');
+                opt.value = bid;
+                opt.textContent = formatBuildId(bid);
+                if (i === bids.length - 1) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
+        populateBranchSelect(cmpBranchA, 'main');
+        populateBranchSelect(cmpBranchB, branches.length > 1 ? branches[1] : 'main');
+        populateBuildSelect(cmpBuildA, cmpBranchA.value);
+        populateBuildSelect(cmpBuildB, cmpBranchB.value);
+
+        cmpBranchA.addEventListener('change', () => { populateBuildSelect(cmpBuildA, cmpBranchA.value); renderComparison(); });
+        cmpBranchB.addEventListener('change', () => { populateBuildSelect(cmpBuildB, cmpBranchB.value); renderComparison(); });
+        cmpBuildA.addEventListener('change', renderComparison);
+        cmpBuildB.addEventListener('change', renderComparison);
+
+        let cmpMetric = 'buildTime';
+        const cmpMetricBtns = document.querySelectorAll('#cmpMetricToggle .metric-btn');
+        cmpMetricBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                cmpMetricBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                cmpMetric = btn.dataset.metric;
+                renderComparison();
+            });
+        });
+
+        const cmpCtx = document.getElementById('cmpChart').getContext('2d');
+        let cmpChart = null;
+
+        function renderComparison() {
+            const brA = cmpBranchA.value, bidA = cmpBuildA.value;
+            const brB = cmpBranchB.value, bidB = cmpBuildB.value;
+            const metric = cmpMetric;
+            const metricLabel = metric === 'buildTime' ? 'Build Time' : 'Eval Time';
+
+            document.getElementById('cmpChartTitle').textContent = `${metricLabel} — ${brA}/${bidA} vs ${brB}/${bidB}`;
+
+            const recsA = (idx[brA]?.[bidA] || []);
+            const recsB = (idx[brB]?.[bidB] || []);
+
+            // Build lookup: test -> machine -> value
+            const lookA = {}, lookB = {};
+            recsA.forEach(r => { if (!lookA[r.test]) lookA[r.test] = {}; lookA[r.test][r.machine] = r[metric]; });
+            recsB.forEach(r => { if (!lookB[r.test]) lookB[r.test] = {}; lookB[r.test][r.machine] = r[metric]; });
+
+            // Union of tests, sorted
+            const tests = [...new Set([...Object.keys(lookA), ...Object.keys(lookB)])].sort();
+            // Union of machines across both
+            const machines = [...new Set([...recsA.map(r => r.machine), ...recsB.map(r => r.machine)])].sort();
+
+            // Build chart data: grouped bar chart, one group per test×machine
+            const labels = [];
+            const valuesA = [];
+            const valuesB = [];
+            const tableRows = [];
+
+            tests.forEach(test => {
+                machines.forEach(machine => {
+                    const vA = lookA[test]?.[machine] ?? null;
+                    const vB = lookB[test]?.[machine] ?? null;
+                    if (vA === null && vB === null) return;
+                    labels.push(`${test}\n(${machine})`);
+                    valuesA.push(vA);
+                    valuesB.push(vB);
+                    const delta = (vA != null && vB != null) ? vB - vA : null;
+                    const deltaPct = (vA != null && vB != null && vA !== 0) ? ((vB - vA) / vA * 100) : null;
+                    tableRows.push({ test, machine, vA, vB, delta, deltaPct });
+                });
+            });
+
+            if (cmpChart) cmpChart.destroy();
+            const colors = getChartColors();
+
+            cmpChart = new Chart(cmpCtx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: `A: ${brA} (${bidA})`,
+                            data: valuesA,
+                            backgroundColor: 'rgba(88,166,255,0.7)',
+                            borderColor: '#58a6ff',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                        },
+                        {
+                            label: `B: ${brB} (${bidB})`,
+                            data: valuesB,
+                            backgroundColor: 'rgba(188,140,255,0.7)',
+                            borderColor: '#bc8cff',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: 'rgba(22,27,34,0.95)',
+                            titleColor: '#e6edf3', bodyColor: '#e6edf3',
+                            borderColor: '#30363d', borderWidth: 1,
+                            cornerRadius: 8, padding: 12,
+                            callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1) ?? '—'} ms` }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: { font: { size: 13, weight: '600' }, padding: 16, color: colors.text },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: colors.text,
+                                font: { size: 10 },
+                                maxRotation: 90,
+                                autoSkip: false,
+                            },
+                            grid: { display: false },
+                        },
+                        y: {
+                            title: { display: true, text: `${metricLabel} (ms)`, color: colors.text, font: { weight: '600' } },
+                            beginAtZero: false,
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.text },
+                        }
+                    }
+                }
+            });
+
+            // Delta table
+            const container = document.getElementById('cmpTableContainer');
+            if (tableRows.length === 0) {
+                container.innerHTML = '<div class="empty-state"><span class="icon">🔍</span>No matching data for these snapshots.</div>';
+                return;
+            }
+
+            let html = `<table><thead><tr>
+                <th>Test</th><th>Machine</th>
+                <th>A (${brA} ${bidA})</th>
+                <th>B (${brB} ${bidB})</th>
+                <th>Δ (ms)</th><th>Δ %</th>
+            </tr></thead><tbody>`;
+
+            tableRows.forEach(row => {
+                const fmtA = row.vA != null ? row.vA.toFixed(1) : '—';
+                const fmtB = row.vB != null ? row.vB.toFixed(1) : '—';
+                let fmtDelta = '—', fmtPct = '—', cls = 'delta-zero';
+                if (row.delta != null) {
+                    const sign = row.delta > 0 ? '+' : '';
+                    fmtDelta = `${sign}${row.delta.toFixed(1)}`;
+                    fmtPct = `${sign}${row.deltaPct.toFixed(1)}%`;
+                    cls = row.delta > 0.5 ? 'delta-pos' : row.delta < -0.5 ? 'delta-neg' : 'delta-zero';
+                }
+                html += `<tr>
+                    <td>${row.test}</td><td>${row.machine}</td>
+                    <td>${fmtA}</td><td>${fmtB}</td>
+                    <td class="${cls}">${fmtDelta}</td>
+                    <td class="${cls}">${fmtPct}</td>
+                </tr>`;
+            });
 
             html += '</tbody></table>';
             container.innerHTML = html;
         }
 
-        render();
+        // Initial render
+        rebuildTestList();
+        renderOverview();
+        renderComparison();
     })();
     </script>
 </body>

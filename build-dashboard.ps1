@@ -3,11 +3,11 @@
     Consolidates MSBuild perf JSON files into a single data.json for the dashboard.
 
 .DESCRIPTION
-    Walks data/{date}/{machine}/{test}.json, extracts build-time and evaluation-time,
-    and writes data.json at the repo root as a flat JSON array.
+    Walks data/{branch}/{buildId}/{machine}/{test}.json, extracts build-time and
+    evaluation-time, and writes data.json at the repo root as a flat JSON array.
 
 .PARAMETER DataDir
-    Source folder containing date/machine/test.json hierarchy. Default: data/ under repo root.
+    Source folder containing branch/buildId/machine/test.json hierarchy. Default: data/ under repo root.
 
 .PARAMETER OutFile
     Output JSON file path. Default: data.json under repo root.
@@ -24,63 +24,72 @@ param(
 $ErrorActionPreference = "Stop"
 
 $records = [System.Collections.Generic.List[object]]::new()
+$skipped = 0
 
-$dateDirs = Get-ChildItem -Path $DataDir -Directory | Sort-Object Name
+$branchDirs = Get-ChildItem -Path $DataDir -Directory | Sort-Object Name
 
-foreach ($dateDir in $dateDirs) {
-    $date = $dateDir.Name
-    # Validate date format (YYYYMMDD)
-    if ($date -notmatch '^\d{8}$') { continue }
+foreach ($branchDir in $branchDirs) {
+    $branch = $branchDir.Name
 
-    $machineDirs = Get-ChildItem -Path $dateDir.FullName -Directory
+    $buildDirs = Get-ChildItem -Path $branchDir.FullName -Directory | Sort-Object Name
 
-    foreach ($machineDir in $machineDirs) {
-        $machine = $machineDir.Name
-        $jsonFiles = Get-ChildItem -Path $machineDir.FullName -Filter "*.json"
+    foreach ($buildDir in $buildDirs) {
+        $buildId = $buildDir.Name
+        # Validate buildId format (YYYYMMDD.N)
+        if ($buildId -notmatch '^\d{8}\.\d+$') { continue }
 
-        foreach ($jsonFile in $jsonFiles) {
-            $testName = [System.IO.Path]::GetFileNameWithoutExtension($jsonFile.Name)
+        $machineDirs = Get-ChildItem -Path $buildDir.FullName -Directory
 
-            try {
-                $json = Get-Content $jsonFile.FullName -Raw | ConvertFrom-Json
-                $results = $json.jobResults.jobs.application.results
+        foreach ($machineDir in $machineDirs) {
+            $machine = $machineDir.Name
+            $jsonFiles = Get-ChildItem -Path $machineDir.FullName -Filter "*.json"
 
-                $buildTime = $null
-                $evalTime  = $null
+            foreach ($jsonFile in $jsonFiles) {
+                $testName = [System.IO.Path]::GetFileNameWithoutExtension($jsonFile.Name)
 
-                if ($results.PSObject.Properties['build-time']) {
-                    $val = $results.'build-time'
-                    if ($null -ne $val -and $val -ne '') {
-                        $buildTime = [double]$val
+                try {
+                    $json = Get-Content $jsonFile.FullName -Raw | ConvertFrom-Json
+                    $results = $json.jobResults.jobs.application.results
+
+                    # Skip records with non-zero exit code (failed builds)
+                    $exitCode = $null
+                    if ($results.PSObject.Properties['exit-code']) {
+                        $exitCode = $results.'exit-code'
                     }
-                }
-                if ($results.PSObject.Properties['evaluation-time']) {
-                    $val = $results.'evaluation-time'
-                    if ($null -ne $val -and $val -ne '') {
-                        $evalTime = [double]$val
+                    if ($null -ne $exitCode -and $exitCode -ne 0) {
+                        Write-Verbose "Skipping $testName ($branch/$buildId/$machine): exit-code=$exitCode"
+                        $skipped++
+                        continue
                     }
-                }
 
-                # Skip records with non-zero exit code (failed builds)
-                $exitCode = $null
-                if ($results.PSObject.Properties['exit-code']) {
-                    $exitCode = $results.'exit-code'
-                }
-                if ($null -ne $exitCode -and $exitCode -ne 0) {
-                    Write-Verbose "Skipping $testName ($date/$machine): exit-code=$exitCode"
-                    continue
-                }
+                    $buildTime = $null
+                    $evalTime  = $null
 
-                $records.Add([PSCustomObject]@{
-                    date      = $date
-                    machine   = $machine
-                    test      = $testName
-                    buildTime = $buildTime
-                    evalTime  = $evalTime
-                })
-            }
-            catch {
-                Write-Warning "Failed to parse $($jsonFile.FullName): $_"
+                    if ($results.PSObject.Properties['build-time']) {
+                        $val = $results.'build-time'
+                        if ($null -ne $val -and $val -ne '') {
+                            $buildTime = [double]$val
+                        }
+                    }
+                    if ($results.PSObject.Properties['evaluation-time']) {
+                        $val = $results.'evaluation-time'
+                        if ($null -ne $val -and $val -ne '') {
+                            $evalTime = [double]$val
+                        }
+                    }
+
+                    $records.Add([PSCustomObject]@{
+                        branch    = $branch
+                        buildId   = $buildId
+                        machine   = $machine
+                        test      = $testName
+                        buildTime = $buildTime
+                        evalTime  = $evalTime
+                    })
+                }
+                catch {
+                    Write-Warning "Failed to parse $($jsonFile.FullName): $_"
+                }
             }
         }
     }
@@ -88,4 +97,4 @@ foreach ($dateDir in $dateDirs) {
 
 $records | ConvertTo-Json -Depth 3 | Set-Content -Path $OutFile -Encoding UTF8
 
-Write-Host "Wrote $($records.Count) records to $OutFile" -ForegroundColor Green
+Write-Host "Wrote $($records.Count) records to $OutFile ($skipped skipped due to non-zero exit code)" -ForegroundColor Green

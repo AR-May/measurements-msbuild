@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSBuild Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f6f8fa;
+            --border: #d0d7de;
+            --text: #1f2328;
+            --text-muted: #656d76;
+            --accent: #0969da;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --surface: #161b22;
+                --border: #30363d;
+                --text: #e6edf3;
+                --text-muted: #8b949e;
+                --accent: #58a6ff;
+            }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+        }
+        header h1 { font-size: 20px; font-weight: 600; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .controls label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .controls select {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 14px;
+            min-width: 300px;
+        }
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 32px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: var(--surface);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover td { background: var(--surface); }
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 48px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 MSBuild Performance Dashboard</h1>
+    </header>
+    <div class="container">
+        <div class="controls">
+            <label for="testSelect">Test:</label>
+            <select id="testSelect"></select>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="chart"></canvas>
+        </div>
+        <div id="tableContainer"></div>
+    </div>
+
+    <script>
+    (async function() {
+        const resp = await fetch('data.json');
+        const data = await resp.json();
+
+        // Collect unique test names, sorted
+        const testNames = [...new Set(data.map(r => r.test))].sort();
+
+        const select = document.getElementById('testSelect');
+        testNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            select.appendChild(opt);
+        });
+
+        // Colors for the four series
+        const COLORS = {
+            'Build Time (PERFLIN)':  { border: '#2da44e', background: 'rgba(45,164,78,0.1)' },
+            'Build Time (PERFWIN)':  { border: '#0969da', background: 'rgba(9,105,218,0.1)' },
+            'Eval Time (PERFLIN)':   { border: '#bf3989', background: 'rgba(191,57,137,0.1)' },
+            'Eval Time (PERFWIN)':   { border: '#e3b341', background: 'rgba(227,179,65,0.1)' },
+        };
+
+        const ctx = document.getElementById('chart').getContext('2d');
+        let chart = null;
+
+        function parseDate(dateStr) {
+            // YYYYMMDD -> Date
+            const y = parseInt(dateStr.substring(0, 4));
+            const m = parseInt(dateStr.substring(4, 6)) - 1;
+            const d = parseInt(dateStr.substring(6, 8));
+            return new Date(y, m, d);
+        }
+
+        function formatDate(dateStr) {
+            const dt = parseDate(dateStr);
+            return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function updateChart(testName) {
+            const filtered = data.filter(r => r.test === testName);
+            const dates = [...new Set(filtered.map(r => r.date))].sort();
+            const machines = [...new Set(filtered.map(r => r.machine))].sort();
+
+            // Build lookup: machine -> date -> record
+            const lookup = {};
+            filtered.forEach(r => {
+                if (!lookup[r.machine]) lookup[r.machine] = {};
+                lookup[r.machine][r.date] = r;
+            });
+
+            const datasets = [];
+            machines.forEach(machine => {
+                // Build time series
+                const buildData = dates.map(d => {
+                    const rec = lookup[machine]?.[d];
+                    return { x: parseDate(d), y: rec?.buildTime ?? null };
+                }).filter(p => p.y !== null);
+                const buildLabel = `Build Time (${machine})`;
+                datasets.push({
+                    label: buildLabel,
+                    data: buildData,
+                    borderColor: COLORS[buildLabel]?.border ?? '#888',
+                    backgroundColor: COLORS[buildLabel]?.background ?? 'rgba(136,136,136,0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    tension: 0.1,
+                    spanGaps: true,
+                });
+
+                // Eval time series
+                const evalData = dates.map(d => {
+                    const rec = lookup[machine]?.[d];
+                    return { x: parseDate(d), y: rec?.evalTime ?? null };
+                }).filter(p => p.y !== null);
+                const evalLabel = `Eval Time (${machine})`;
+                datasets.push({
+                    label: evalLabel,
+                    data: evalData,
+                    borderColor: COLORS[evalLabel]?.border ?? '#888',
+                    backgroundColor: COLORS[evalLabel]?.background ?? 'rgba(136,136,136,0.1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    borderDash: [6, 3],
+                    tension: 0.1,
+                    spanGaps: true,
+                });
+            });
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)} ms`
+                            }
+                        },
+                        legend: { position: 'top' },
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
+                            title: { display: true, text: 'Date' },
+                            grid: { color: 'rgba(128,128,128,0.1)' },
+                        },
+                        y: {
+                            title: { display: true, text: 'Time (ms)' },
+                            beginAtZero: false,
+                            grid: { color: 'rgba(128,128,128,0.1)' },
+                        }
+                    }
+                }
+            });
+
+            // Build table
+            updateTable(testName, dates, machines, lookup);
+        }
+
+        function updateTable(testName, dates, machines, lookup) {
+            const container = document.getElementById('tableContainer');
+            if (dates.length === 0) {
+                container.innerHTML = '<div class="empty-state">No data available for this test.</div>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Date</th>';
+            machines.forEach(m => {
+                html += `<th>Build Time (${m})</th><th>Eval Time (${m})</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            dates.forEach(d => {
+                html += `<tr><td>${formatDate(d)}</td>`;
+                machines.forEach(m => {
+                    const rec = lookup[m]?.[d];
+                    const bt = rec?.buildTime != null ? rec.buildTime.toFixed(1) : '—';
+                    const et = rec?.evalTime != null ? rec.evalTime.toFixed(1) : '—';
+                    html += `<td>${bt}</td><td>${et}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        select.addEventListener('change', () => updateChart(select.value));
+
+        // Initial render
+        if (testNames.length > 0) {
+            select.value = testNames[0];
+            updateChart(testNames[0]);
+        }
+    })();
+    </script>
+</body>
+</html>

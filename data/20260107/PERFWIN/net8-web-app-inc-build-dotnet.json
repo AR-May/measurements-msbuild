@@ -1,0 +1,918 @@
+{
+  "returnCode": 0,
+  "jobResults": {
+    "jobs": {
+      "application": {
+        "results": {
+          "netSdkVersion": "10.0.100-rtm.25513.102",
+          "aspNetCoreVersion": "10.0.0-rtm.25513.102+b502b6eeec0d",
+          "netCoreAppVersion": "10.0.0-rtm.25513.102+b502b6eeec0d",
+          "benchmarks/build-time": 2888.0,
+          "benchmarks/published-size": 80069.0,
+          "benchmarks/symbols-size": 28.0,
+          "benchmarks/start-time": 5075.0,
+          "benchmarks/cpu/global": 10.656352996826172,
+          "benchmarks/working-set": 45.0,
+          "benchmarks/private-memory": 16.0,
+          "benchmarks/cpu": 1.0,
+          "benchmarks/cpu/raw": 9.0,
+          "msbuild-version": "18.0.0.51402",
+          "msbuild-display-version": "18.0.0.51402",
+          "evaluation-time": 502.0,
+          "evaluation-time-jsonlist": "[503,501,501,502,503,502,500,501,504,503]",
+          "evaluation-time-globbing": 4.0,
+          "evaluation-time-globbing-jsonlist": "[4,4,4,4,4,4,4,4,4,4]",
+          "evaluation-time-pass0": 2.0,
+          "evaluation-time-pass0-jsonlist": "[2,2,2,2,2,2,2,2,2,2]",
+          "evaluation-time-pass1": 282.0,
+          "evaluation-time-pass1-jsonlist": "[285,281,282,282,283,281,281,282,281,282]",
+          "evaluation-time-pass2": 2.0,
+          "evaluation-time-pass2-jsonlist": "[2,2,2,2,2,2,2,2,2,2]",
+          "evaluation-time-pass3": 36.0,
+          "evaluation-time-pass3-jsonlist": "[36,36,36,36,36,36,36,36,36,36]",
+          "evaluation-time-pass3dot1": 53.1,
+          "evaluation-time-pass3dot1-jsonlist": "[54,53,53,53,53,53,53,53,53,53]",
+          "evaluation-time-pass4": 2.8,
+          "evaluation-time-pass4-jsonlist": "[3,3,2,3,3,3,3,3,2,3]",
+          "evaluation-time-pass5": 122.5,
+          "evaluation-time-pass5-jsonlist": "[120,123,122,123,122,123,121,122,125,124]",
+          "exit-code": 0.0,
+          "exit-code-jsonlist": "[\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"]",
+          "build-time": 1210.5612800000001,
+          "build-time-jsonlist": "[1222.5337,1217.5262,1217.7224,1202.3291,1202.3973,1202.2946,1202.3851,1202.4381,1202.2535,1233.7328]",
+          "info/test-asset": "Net8WebApp",
+          "info/test-scenario": "IncrementalBuild",
+          "info/msbuild-app": "Dotnet",
+          "info/test-version": 1.0,
+          "info/iterations-number": 10.0,
+          "dotnet-version": "10.0.100-rtm.25513.102"
+        },
+        "metadata": [
+          {
+            "name": "benchmarks/cpu",
+            "description": "Max Process CPU Usage (%)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/cpu/raw",
+            "description": "Max Cores usage (%)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/working-set",
+            "description": "Max Working Set (MB)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/private-memory",
+            "description": "Max Private Memory (MB)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/build-time",
+            "description": "Build Time (ms)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/start-time",
+            "description": "Start Time (ms)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/published-size",
+            "description": "Published Size (KB)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/published-nativeaot-size/raw",
+            "description": "Native Aot Size summary",
+            "format": "json"
+          },
+          {
+            "name": "benchmarks/symbols-size",
+            "description": "Symbols Size (KB)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/memory/swap",
+            "description": "Swap (MB)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/cpu/periods/total",
+            "description": "Runnable Periods (#)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/cpu/periods/throttled",
+            "description": "Throttled Periods (#)",
+            "format": "n0"
+          },
+          {
+            "name": "benchmarks/cpu/throttled",
+            "description": "Throttled Time (ns)",
+            "format": "n0"
+          },
+          {
+            "name": "netSdkVersion",
+            "description": ".NET Core SDK Version",
+            "format": ""
+          },
+          {
+            "name": "AspNetCoreVersion",
+            "description": "ASP.NET Core Version",
+            "format": ""
+          },
+          {
+            "name": "NetCoreAppVersion",
+            "description": ".NET Runtime Version",
+            "format": ""
+          },
+          {
+            "name": "benchmarks/cpu/global",
+            "description": "Max Global CPU Usage (%)",
+            "format": "n0"
+          },
+          {
+            "name": "msbuild-version",
+            "description": "MSBuild version",
+            "format": "n2"
+          },
+          {
+            "name": "msbuild-display-version",
+            "description": "MSBuild display version",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time",
+            "description": "Total evaluation",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-jsonlist",
+            "description": "Total evaluation Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-globbing",
+            "description": "Total evaluation for globbing",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-globbing-jsonlist",
+            "description": "Total evaluation for globbing Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass0",
+            "description": "Initial properties (pass 0)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass0-jsonlist",
+            "description": "Initial properties (pass 0) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass1",
+            "description": "Properties (pass 1)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass1-jsonlist",
+            "description": "Properties (pass 1) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass2",
+            "description": "Item definition groups (pass 2)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass2-jsonlist",
+            "description": "Item definition groups (pass 2) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass3",
+            "description": "Items (pass 3)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass3-jsonlist",
+            "description": "Items (pass 3) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass3dot1",
+            "description": "Lazy items (pass 3.1)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass3dot1-jsonlist",
+            "description": "Lazy items (pass 3.1) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass4",
+            "description": "Using tasks (pass 4)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass4-jsonlist",
+            "description": "Using tasks (pass 4) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass5",
+            "description": "Targets (pass 5)",
+            "format": "n2"
+          },
+          {
+            "name": "evaluation-time-pass5-jsonlist",
+            "description": "Targets (pass 5) Json List",
+            "format": "n2"
+          },
+          {
+            "name": "exit-code",
+            "description": "Exit Code",
+            "format": "n2"
+          },
+          {
+            "name": "exit-code-jsonlist",
+            "description": "Exit Code Json List",
+            "format": "n2"
+          },
+          {
+            "name": "build-time",
+            "description": "Build time",
+            "format": "n2"
+          },
+          {
+            "name": "build-time-jsonlist",
+            "description": "Build time Json List",
+            "format": "n2"
+          },
+          {
+            "name": "info/test-asset",
+            "description": "Test Asset",
+            "format": "n2"
+          },
+          {
+            "name": "info/test-scenario",
+            "description": "Test Scenario",
+            "format": "n2"
+          },
+          {
+            "name": "info/msbuild-app",
+            "description": "MSBuild App",
+            "format": "n2"
+          },
+          {
+            "name": "info/test-version",
+            "description": "Test Version",
+            "format": "n2"
+          },
+          {
+            "name": "info/iterations-number",
+            "description": "Number of test runs",
+            "format": "n2"
+          },
+          {
+            "name": "dotnet-version",
+            "description": "Dotnet version",
+            "format": "n2"
+          }
+        ],
+        "dependencies": [],
+        "measurements": [
+          [
+            {
+              "timestamp": "2026-01-07T11:38:17.3086139Z",
+              "name": "netSdkVersion",
+              "value": "10.0.100-rtm.25513.102"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:17.3087659Z",
+              "name": "AspNetCoreVersion",
+              "value": "10.0.0-rtm.25513.102+b502b6eeec0d"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:17.3088511Z",
+              "name": "NetCoreAppVersion",
+              "value": "10.0.0-rtm.25513.102+b502b6eeec0d"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:20.1975076Z",
+              "name": "benchmarks/build-time",
+              "value": 2888
+            },
+            {
+              "timestamp": "2026-01-07T11:38:20.1995985Z",
+              "name": "benchmarks/published-size",
+              "value": 80069
+            },
+            {
+              "timestamp": "2026-01-07T11:38:20.2008109Z",
+              "name": "benchmarks/symbols-size",
+              "value": 28
+            },
+            {
+              "timestamp": "2026-01-07T11:38:25.2795537Z",
+              "name": "benchmarks/start-time",
+              "value": 5075
+            },
+            {
+              "timestamp": "2026-01-07T11:38:25.2951772Z",
+              "name": "benchmarks/cpu/global",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:26.3573578Z",
+              "name": "benchmarks/working-set",
+              "value": 35.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:26.3573578Z",
+              "name": "benchmarks/private-memory",
+              "value": 11.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:26.3573578Z",
+              "name": "benchmarks/cpu",
+              "value": 1.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:26.3573578Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 9.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:25.4573288Z",
+              "name": "msbuild-version",
+              "value": "18.0.0.51402"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:25.4573755Z",
+              "name": "msbuild-display-version",
+              "value": "18.0.0.51402"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:26.3070391Z",
+              "name": "benchmarks/cpu/global",
+              "value": 9.466154098510742
+            },
+            {
+              "timestamp": "2026-01-07T11:38:27.3571252Z",
+              "name": "benchmarks/working-set",
+              "value": 35.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:27.3571252Z",
+              "name": "benchmarks/private-memory",
+              "value": 11.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:27.3571252Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:27.3571252Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:27.3068021Z",
+              "name": "benchmarks/cpu/global",
+              "value": 9.09347152709961
+            },
+            {
+              "timestamp": "2026-01-07T11:38:28.372513Z",
+              "name": "benchmarks/working-set",
+              "value": 35.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:28.372513Z",
+              "name": "benchmarks/private-memory",
+              "value": 11.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:28.372513Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:28.372513Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:28.3065847Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.702760696411133
+            },
+            {
+              "timestamp": "2026-01-07T11:38:29.3722853Z",
+              "name": "benchmarks/working-set",
+              "value": 37.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:29.3722853Z",
+              "name": "benchmarks/private-memory",
+              "value": 12.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:29.3722853Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:29.3722853Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:29.3063339Z",
+              "name": "benchmarks/cpu/global",
+              "value": 10.656352996826172
+            },
+            {
+              "timestamp": "2026-01-07T11:38:30.3876659Z",
+              "name": "benchmarks/working-set",
+              "value": 37.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:30.3876659Z",
+              "name": "benchmarks/private-memory",
+              "value": 12.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:30.3876659Z",
+              "name": "benchmarks/cpu",
+              "value": 1.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:30.3876659Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 8.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:30.3061109Z",
+              "name": "benchmarks/cpu/global",
+              "value": 9.353988647460938
+            },
+            {
+              "timestamp": "2026-01-07T11:38:31.4030657Z",
+              "name": "benchmarks/working-set",
+              "value": 38.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:31.4030657Z",
+              "name": "benchmarks/private-memory",
+              "value": 13.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:31.4030657Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:31.4030657Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:31.3058868Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.442307472229004
+            },
+            {
+              "timestamp": "2026-01-07T11:38:32.4028345Z",
+              "name": "benchmarks/working-set",
+              "value": 39.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:32.4028345Z",
+              "name": "benchmarks/private-memory",
+              "value": 13.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:32.4028345Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:32.4028345Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:32.3056267Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.442253112792969
+            },
+            {
+              "timestamp": "2026-01-07T11:38:33.4026012Z",
+              "name": "benchmarks/working-set",
+              "value": 39.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:33.4026012Z",
+              "name": "benchmarks/private-memory",
+              "value": 13.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:33.4026012Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:33.4026012Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:33.3054164Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.702834129333496
+            },
+            {
+              "timestamp": "2026-01-07T11:38:34.4023733Z",
+              "name": "benchmarks/working-set",
+              "value": 40.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:34.4023733Z",
+              "name": "benchmarks/private-memory",
+              "value": 14.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:34.4023733Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:34.4023733Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:34.3051693Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.702696800231934
+            },
+            {
+              "timestamp": "2026-01-07T11:38:35.304953Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.181836128234863
+            },
+            {
+              "timestamp": "2026-01-07T11:38:35.4177597Z",
+              "name": "benchmarks/working-set",
+              "value": 40.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:35.4177597Z",
+              "name": "benchmarks/private-memory",
+              "value": 14.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:35.4177597Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:35.4177597Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:36.3047021Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.31204891204834
+            },
+            {
+              "timestamp": "2026-01-07T11:38:36.4331406Z",
+              "name": "benchmarks/working-set",
+              "value": 40.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:36.4331406Z",
+              "name": "benchmarks/private-memory",
+              "value": 14.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:36.4331406Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:36.4331406Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:37.304471Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.442262649536133
+            },
+            {
+              "timestamp": "2026-01-07T11:38:37.4485375Z",
+              "name": "benchmarks/working-set",
+              "value": 40.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:37.4485375Z",
+              "name": "benchmarks/private-memory",
+              "value": 14.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:37.4485375Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:37.4485375Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:38.3042217Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.702759742736816
+            },
+            {
+              "timestamp": "2026-01-07T11:38:38.448306Z",
+              "name": "benchmarks/working-set",
+              "value": 41.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:38.448306Z",
+              "name": "benchmarks/private-memory",
+              "value": 15.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:38.448306Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:38.448306Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:39.3039914Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.83297348022461
+            },
+            {
+              "timestamp": "2026-01-07T11:38:39.4636918Z",
+              "name": "benchmarks/working-set",
+              "value": 41.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:39.4636918Z",
+              "name": "benchmarks/private-memory",
+              "value": 15.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:39.4636918Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:39.4636918Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:40.3037569Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.312012672424316
+            },
+            {
+              "timestamp": "2026-01-07T11:38:40.4790762Z",
+              "name": "benchmarks/working-set",
+              "value": 42.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:40.4790762Z",
+              "name": "benchmarks/private-memory",
+              "value": 15.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:40.4790762Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:40.4790762Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.303541Z",
+              "name": "benchmarks/cpu/global",
+              "value": 8.312077522277832
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4788449Z",
+              "name": "benchmarks/working-set",
+              "value": 45.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4788449Z",
+              "name": "benchmarks/private-memory",
+              "value": 16.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4788449Z",
+              "name": "benchmarks/cpu",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4788449Z",
+              "name": "benchmarks/cpu/raw",
+              "value": 3.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3795662Z",
+              "name": "evaluation-time",
+              "value": 502.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3919671Z",
+              "name": "evaluation-time-jsonlist",
+              "value": "[503,501,501,502,503,502,500,501,504,503]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3919878Z",
+              "name": "evaluation-time-globbing",
+              "value": 4.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920284Z",
+              "name": "evaluation-time-globbing-jsonlist",
+              "value": "[4,4,4,4,4,4,4,4,4,4]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920439Z",
+              "name": "evaluation-time-pass0",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920587Z",
+              "name": "evaluation-time-pass0-jsonlist",
+              "value": "[2,2,2,2,2,2,2,2,2,2]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920707Z",
+              "name": "evaluation-time-pass1",
+              "value": 282.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920851Z",
+              "name": "evaluation-time-pass1-jsonlist",
+              "value": "[285,281,282,282,283,281,281,282,281,282]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3920977Z",
+              "name": "evaluation-time-pass2",
+              "value": 2.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921113Z",
+              "name": "evaluation-time-pass2-jsonlist",
+              "value": "[2,2,2,2,2,2,2,2,2,2]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921247Z",
+              "name": "evaluation-time-pass3",
+              "value": 36.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921381Z",
+              "name": "evaluation-time-pass3-jsonlist",
+              "value": "[36,36,36,36,36,36,36,36,36,36]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921502Z",
+              "name": "evaluation-time-pass3dot1",
+              "value": 53.1
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921638Z",
+              "name": "evaluation-time-pass3dot1-jsonlist",
+              "value": "[54,53,53,53,53,53,53,53,53,53]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921806Z",
+              "name": "evaluation-time-pass4",
+              "value": 2.8
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3921951Z",
+              "name": "evaluation-time-pass4-jsonlist",
+              "value": "[3,3,2,3,3,3,3,3,2,3]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.392207Z",
+              "name": "evaluation-time-pass5",
+              "value": 122.5
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3922209Z",
+              "name": "evaluation-time-pass5-jsonlist",
+              "value": "[120,123,122,123,122,123,121,122,125,124]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3949405Z",
+              "name": "exit-code",
+              "value": "0"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3954972Z",
+              "name": "exit-code-jsonlist",
+              "value": "[\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.3981632Z",
+              "name": "build-time",
+              "value": 1210.5612800000001
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4014406Z",
+              "name": "build-time-jsonlist",
+              "value": "[1222.5337,1217.5262,1217.7224,1202.3291,1202.3973,1202.2946,1202.3851,1202.4381,1202.2535,1233.7328]"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4016528Z",
+              "name": "info/test-asset",
+              "value": "Net8WebApp"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4016873Z",
+              "name": "info/test-scenario",
+              "value": "IncrementalBuild"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.401715Z",
+              "name": "info/msbuild-app",
+              "value": "Dotnet"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4017471Z",
+              "name": "info/test-version",
+              "value": 1.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4017604Z",
+              "name": "info/iterations-number",
+              "value": 10.0
+            },
+            {
+              "timestamp": "2026-01-07T11:38:41.4804314Z",
+              "name": "dotnet-version",
+              "value": "10.0.100-rtm.25513.102"
+            },
+            {
+              "timestamp": "2026-01-07T11:38:42.3032191Z",
+              "name": "benchmarks/cpu/global",
+              "value": 2.9721338748931885
+            },
+            {
+              "timestamp": "2026-01-07T11:38:43.3029863Z",
+              "name": "benchmarks/cpu/global",
+              "value": 0.0
+            }
+          ]
+        ],
+        "environment": {
+          "hw": "PHYSICAL",
+          "env": "PERFWIN",
+          "os": "Windows",
+          "arch": "X64",
+          "proc": 12,
+          "version": "0.2.0-dev"
+        },
+        "variables": {
+          "build_scenario": "net8-web-app-inc-build-dotnet",
+          "serverAddress": "10.0.0.110",
+          "cores": 12,
+          "databaseServer": "10.0.0.104"
+        },
+        "benchmarks": []
+      }
+    },
+    "properties": {
+      "perfstarCIBuildNumber": "20260107.1.s",
+      "branch": "refs/heads/main",
+      "ciRunReason": "Schedule",
+      "machineID": "PERFWIN",
+      "schemaVersion": "2"
+    }
+  },
+  "benchmarks": []
+}

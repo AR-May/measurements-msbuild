@@ -8,21 +8,38 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
     <style>
         :root {
-            --bg: #ffffff;
-            --surface: #f6f8fa;
-            --border: #d0d7de;
-            --text: #1f2328;
-            --text-muted: #656d76;
-            --accent: #0969da;
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface-raised: #1c2129;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --text-subtle: #6e7681;
+            --accent: #58a6ff;
+            --accent-emphasis: #1f6feb;
+            --success: #3fb950;
+            --danger: #f85149;
+            --warning: #d29922;
+            --purple: #bc8cff;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
         }
-        @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: light) {
             :root {
-                --bg: #0d1117;
-                --surface: #161b22;
-                --border: #30363d;
-                --text: #e6edf3;
-                --text-muted: #8b949e;
-                --accent: #58a6ff;
+                --bg: #f0f3f6;
+                --surface: #ffffff;
+                --surface-raised: #ffffff;
+                --border: #d8dee4;
+                --text: #1f2328;
+                --text-muted: #656d76;
+                --text-subtle: #8b949e;
+                --accent: #0969da;
+                --accent-emphasis: #0550ae;
+                --success: #1a7f37;
+                --danger: #cf222e;
+                --warning: #9a6700;
+                --purple: #8250df;
+                --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
             }
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,98 +47,198 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.5;
+            line-height: 1.6;
+            min-height: 100vh;
         }
         header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
-        }
-        header h1 { font-size: 20px; font-weight: 600; }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px;
-        }
-        .controls {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-        .control-group { display: flex; flex-direction: column; gap: 6px; }
-        .control-group > span {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .metric-toggle {
-            display: flex;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .metric-toggle label {
-            padding: 6px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            border-right: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text-muted);
-            transition: background 0.15s, color 0.15s;
-            user-select: none;
-        }
-        .metric-toggle label:last-child { border-right: none; }
-        .metric-toggle input { display: none; }
-        .metric-toggle input:checked + label {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent-emphasis), var(--purple));
+            padding: 28px 32px;
             color: #fff;
         }
-        .test-list-wrapper {
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        header p {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+        .layout {
+            display: flex;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+            gap: 24px;
+        }
+        .sidebar {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            background: var(--surface-raised);
+        }
+        .card-body { padding: 16px; }
+        .metric-toggle {
+            display: flex;
+            gap: 8px;
+            padding: 16px;
+        }
+        .metric-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        .metric-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .metric-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(88,166,255,0.3);
+        }
+        .search-box {
+            padding: 0 16px 12px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: 6px;
-            background: var(--surface);
-            max-height: 220px;
-            min-width: 340px;
-            overflow-y: auto;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
         }
+        .search-box input:focus { border-color: var(--accent); }
+        .search-box input::placeholder { color: var(--text-subtle); }
         .test-list-actions {
             display: flex;
             gap: 8px;
-            padding: 6px 10px;
-            border-bottom: 1px solid var(--border);
+            padding: 0 16px 8px;
         }
         .test-list-actions button {
             font-size: 12px;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border: 1px solid var(--border);
-            border-radius: 4px;
-            background: var(--bg);
+            border-radius: 6px;
+            background: var(--surface-raised);
             color: var(--text-muted);
             cursor: pointer;
+            transition: all 0.15s;
         }
-        .test-list-actions button:hover { color: var(--text); }
+        .test-list-actions button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .test-list-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-bottom: 8px;
+        }
+        .test-list-scroll::-webkit-scrollbar { width: 6px; }
+        .test-list-scroll::-webkit-scrollbar-track { background: transparent; }
+        .test-list-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         .test-list {
             list-style: none;
-            padding: 4px 0;
         }
         .test-list li {
-            padding: 3px 10px;
+            padding: 4px 16px;
+            transition: background 0.1s;
         }
-        .test-list li:hover { background: var(--bg); }
+        .test-list li:hover { background: var(--surface-raised); }
+        .test-list li.hidden { display: none; }
         .test-list label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 13px;
             cursor: pointer;
         }
-        .test-list input[type="checkbox"] { accent-color: var(--accent); }
+        .test-list input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+        .badge-lin { background: rgba(63,185,80,0.15); color: var(--success); }
+        .badge-win { background: rgba(88,166,255,0.15); color: var(--accent); }
+        .badge-both { background: rgba(188,140,255,0.15); color: var(--purple); }
         .chart-wrapper {
             position: relative;
             width: 100%;
-            height: 450px;
-            margin-bottom: 32px;
+            height: 480px;
+            padding: 16px;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .stat {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .table-wrapper {
+            overflow-x: auto;
         }
         table {
             width: 100%;
@@ -129,56 +246,79 @@
             font-size: 13px;
         }
         th, td {
-            padding: 8px 12px;
+            padding: 10px 14px;
             text-align: right;
             border-bottom: 1px solid var(--border);
+            white-space: nowrap;
         }
         th {
-            background: var(--surface);
+            background: var(--surface-raised);
             font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--text-muted);
             position: sticky;
             top: 0;
+            z-index: 1;
         }
         th:first-child, td:first-child { text-align: left; }
-        tr:hover td { background: var(--surface); }
+        tr:hover td { background: var(--surface-raised); }
+        td { font-variant-numeric: tabular-nums; }
         .empty-state {
             text-align: center;
             color: var(--text-muted);
-            padding: 48px;
-            font-size: 16px;
+            padding: 64px 24px;
+            font-size: 15px;
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 12px; display: block; }
+        @media (max-width: 900px) {
+            .layout { flex-direction: column; }
+            .sidebar { flex: none; }
         }
     </style>
 </head>
 <body>
     <header>
         <h1>📊 MSBuild Performance Dashboard</h1>
+        <p>Historical build and evaluation time measurements</p>
     </header>
-    <div class="container">
-        <div class="controls">
-            <div class="control-group">
-                <span>Metric</span>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="card">
+                <div class="card-header">Metric</div>
                 <div class="metric-toggle">
-                    <input type="radio" name="metric" id="metricBuild" value="buildTime" checked>
-                    <label for="metricBuild">Build Time</label>
-                    <input type="radio" name="metric" id="metricEval" value="evalTime">
-                    <label for="metricEval">Eval Time</label>
+                    <button class="metric-btn active" data-metric="buildTime">⏱ Build Time</button>
+                    <button class="metric-btn" data-metric="evalTime">📐 Eval Time</button>
                 </div>
             </div>
-            <div class="control-group">
-                <span>Tests</span>
-                <div class="test-list-wrapper">
-                    <div class="test-list-actions">
-                        <button id="btnSelectAll">Select All</button>
-                        <button id="btnSelectNone">Select None</button>
-                    </div>
+            <div class="card" style="flex:1; display:flex; flex-direction:column;">
+                <div class="card-header">Tests</div>
+                <div class="search-box" style="padding-top:12px;">
+                    <input type="text" id="testSearch" placeholder="Filter tests…">
+                </div>
+                <div class="test-list-actions">
+                    <button id="btnSelectAll">Select All</button>
+                    <button id="btnSelectNone">Clear</button>
+                </div>
+                <div class="test-list-scroll">
                     <ul class="test-list" id="testList"></ul>
                 </div>
             </div>
+        </aside>
+        <div class="main">
+            <div class="card">
+                <div class="card-header" id="chartTitle">Build Time — Trend</div>
+                <div class="chart-wrapper">
+                    <canvas id="chart"></canvas>
+                </div>
+                <div class="stats-bar" id="statsBar"></div>
+            </div>
+            <div class="card">
+                <div class="card-header">Data</div>
+                <div class="table-wrapper" id="tableContainer"></div>
+            </div>
         </div>
-        <div class="chart-wrapper">
-            <canvas id="chart"></canvas>
-        </div>
-        <div id="tableContainer"></div>
     </div>
 
     <script>
@@ -189,13 +329,32 @@
         const testNames = [...new Set(data.map(r => r.test))].sort();
         const machines = [...new Set(data.map(r => r.machine))].sort();
 
-        // Distinct color palette (enough for many test×machine combos)
+        // Build a set of which machines each test has data for
+        const testMachines = {};
+        data.forEach(r => {
+            if (!testMachines[r.test]) testMachines[r.test] = new Set();
+            testMachines[r.test].add(r.machine);
+        });
+
+        // Rich color palette
         const PALETTE = [
-            '#2da44e', '#0969da', '#bf3989', '#e3b341', '#8250df',
-            '#cf222e', '#0550ae', '#116329', '#953800', '#54aeff',
-            '#d4a72c', '#ff7b72', '#7ee787', '#a5d6ff', '#f778ba',
-            '#d2a8ff', '#ffa657', '#79c0ff', '#56d364', '#ff9bce',
+            '#58a6ff', '#3fb950', '#f0883e', '#bc8cff', '#f778ba',
+            '#79c0ff', '#56d364', '#d29922', '#db61a2', '#a5d6ff',
+            '#d2a8ff', '#ff9bce', '#ffa657', '#7ee787', '#ff7b72',
+            '#54aeff', '#e3b341', '#2da44e', '#cf222e', '#8250df',
         ];
+
+        let activeMetric = 'buildTime';
+
+        // Metric toggle
+        document.querySelectorAll('.metric-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeMetric = btn.dataset.metric;
+                render();
+            });
+        });
 
         // Build test checkbox list
         const testList = document.getElementById('testList');
@@ -208,21 +367,45 @@
             if (i === 0) cb.checked = true;
             cb.addEventListener('change', render);
             label.appendChild(cb);
-            label.appendChild(document.createTextNode(name));
+            const span = document.createElement('span');
+            span.textContent = name;
+            label.appendChild(span);
+            // Machine availability badge
+            const tm = testMachines[name];
+            const badge = document.createElement('span');
+            badge.classList.add('badge');
+            if (tm.size === machines.length) {
+                badge.classList.add('badge-both');
+                badge.textContent = 'LIN+WIN';
+            } else if (tm.has('PERFLIN')) {
+                badge.classList.add('badge-lin');
+                badge.textContent = 'LIN';
+            } else {
+                badge.classList.add('badge-win');
+                badge.textContent = 'WIN';
+            }
+            label.appendChild(badge);
             li.appendChild(label);
             testList.appendChild(li);
         });
 
+        // Search filter
+        document.getElementById('testSearch').addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            testList.querySelectorAll('li').forEach(li => {
+                const text = li.textContent.toLowerCase();
+                li.classList.toggle('hidden', !text.includes(q));
+            });
+        });
+
         document.getElementById('btnSelectAll').addEventListener('click', () => {
-            testList.querySelectorAll('input').forEach(cb => cb.checked = true);
+            testList.querySelectorAll('li:not(.hidden) input').forEach(cb => cb.checked = true);
             render();
         });
         document.getElementById('btnSelectNone').addEventListener('click', () => {
             testList.querySelectorAll('input').forEach(cb => cb.checked = false);
             render();
         });
-
-        document.querySelectorAll('input[name="metric"]').forEach(r => r.addEventListener('change', render));
 
         const ctx = document.getElementById('chart').getContext('2d');
         let chart = null;
@@ -243,17 +426,16 @@
             return [...testList.querySelectorAll('input:checked')].map(cb => cb.value);
         }
 
-        function getSelectedMetric() {
-            return document.querySelector('input[name="metric"]:checked').value;
-        }
-
         function getMetricLabel() {
-            return getSelectedMetric() === 'buildTime' ? 'Build Time' : 'Eval Time';
+            return activeMetric === 'buildTime' ? 'Build Time' : 'Eval Time';
         }
 
         function render() {
             const selectedTests = getSelectedTests();
-            const metric = getSelectedMetric();
+            const metric = activeMetric;
+            const metricLabel = getMetricLabel();
+
+            document.getElementById('chartTitle').textContent = `${metricLabel} — Trend`;
 
             const filtered = data.filter(r => selectedTests.includes(r.test));
             const allDates = [...new Set(filtered.map(r => r.date))].sort();
@@ -268,6 +450,7 @@
 
             const datasets = [];
             let colorIdx = 0;
+            let allValues = [];
 
             selectedTests.forEach(test => {
                 machines.forEach(machine => {
@@ -281,6 +464,8 @@
 
                     if (seriesData.length === 0) return;
 
+                    seriesData.forEach(p => allValues.push(p.y));
+
                     const color = PALETTE[colorIdx % PALETTE.length];
                     const isDashed = machine === machines[1];
                     colorIdx++;
@@ -289,17 +474,27 @@
                         label: `${test} (${machine})`,
                         data: seriesData,
                         borderColor: color,
-                        backgroundColor: color + '1a',
-                        borderWidth: 2,
-                        pointRadius: 4,
-                        tension: 0.1,
+                        backgroundColor: color + '20',
+                        borderWidth: 2.5,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: color,
+                        pointBorderColor: '#0d1117',
+                        pointBorderWidth: 2,
+                        tension: 0.3,
                         spanGaps: true,
-                        borderDash: isDashed ? [6, 3] : [],
+                        borderDash: isDashed ? [8, 4] : [],
+                        fill: datasets.length === 0 && selectedTests.length === 1,
                     });
                 });
             });
 
             if (chart) chart.destroy();
+
+            const gridColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--border').trim() + '40';
+            const textColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--text-muted').trim();
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -307,49 +502,87 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: { duration: 400, easing: 'easeOutQuart' },
                     interaction: { mode: 'index', intersect: false },
                     plugins: {
                         tooltip: {
+                            backgroundColor: 'rgba(22,27,34,0.95)',
+                            titleColor: '#e6edf3',
+                            bodyColor: '#e6edf3',
+                            borderColor: '#30363d',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12,
+                            titleFont: { weight: '600' },
                             callbacks: {
-                                label: c => `${c.dataset.label}: ${c.parsed.y?.toFixed(1)} ms`
+                                label: c => ` ${c.dataset.label}: ${c.parsed.y?.toFixed(1)} ms`
                             }
                         },
                         legend: {
-                            position: 'top',
-                            labels: { boxWidth: 16, font: { size: 11 } },
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 14,
+                                boxHeight: 14,
+                                borderRadius: 3,
+                                useBorderRadius: true,
+                                font: { size: 12 },
+                                padding: 16,
+                                color: textColor,
+                            },
                         },
                     },
                     scales: {
                         x: {
                             type: 'time',
                             time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
-                            title: { display: true, text: 'Date' },
-                            grid: { color: 'rgba(128,128,128,0.1)' },
+                            title: { display: true, text: 'Date', color: textColor, font: { weight: '600' } },
+                            grid: { color: gridColor },
+                            ticks: { color: textColor },
                         },
                         y: {
-                            title: { display: true, text: `${getMetricLabel()} (ms)` },
+                            title: { display: true, text: `${metricLabel} (ms)`, color: textColor, font: { weight: '600' } },
                             beginAtZero: false,
-                            grid: { color: 'rgba(128,128,128,0.1)' },
+                            grid: { color: gridColor },
+                            ticks: { color: textColor },
                         }
                     }
                 }
             });
 
+            // Stats bar
+            updateStats(allValues);
             updateTable(selectedTests, allDates, machines, lookup, metric);
+        }
+
+        function updateStats(values) {
+            const bar = document.getElementById('statsBar');
+            if (values.length === 0) {
+                bar.innerHTML = '';
+                return;
+            }
+            const avg = values.reduce((a, b) => a + b, 0) / values.length;
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const latest = values[values.length - 1];
+            bar.innerHTML = `
+                <div class="stat"><div class="stat-value">${avg.toFixed(0)}</div><div class="stat-label">Average (ms)</div></div>
+                <div class="stat"><div class="stat-value">${min.toFixed(0)}</div><div class="stat-label">Min (ms)</div></div>
+                <div class="stat"><div class="stat-value">${max.toFixed(0)}</div><div class="stat-label">Max (ms)</div></div>
+                <div class="stat"><div class="stat-value">${values.length}</div><div class="stat-label">Data Points</div></div>
+            `;
         }
 
         function updateTable(selectedTests, dates, machines, lookup, metric) {
             const container = document.getElementById('tableContainer');
             if (selectedTests.length === 0 || dates.length === 0) {
-                container.innerHTML = '<div class="empty-state">Select one or more tests to view data.</div>';
+                container.innerHTML = '<div class="empty-state"><span class="icon">📈</span>Select one or more tests to view data.</div>';
                 return;
             }
 
-            const metricLabel = getMetricLabel();
             let html = '<table><thead><tr><th>Date</th>';
             selectedTests.forEach(test => {
                 machines.forEach(m => {
-                    html += `<th>${test}<br><small>(${m})</small></th>`;
+                    html += `<th>${test}<br><small style="font-weight:400;opacity:0.7">${m}</small></th>`;
                 });
             });
             html += '</tr></thead><tbody>';
@@ -360,7 +593,7 @@
                     machines.forEach(m => {
                         const rec = lookup[test]?.[m]?.[d];
                         const val = rec?.[metric];
-                        html += `<td>${val != null ? val.toFixed(1) : '—'}</td>`;
+                        html += `<td>${val != null ? val.toFixed(1) : '<span style="color:var(--text-subtle)">—</span>'}</td>`;
                     });
                 });
                 html += '</tr>';
@@ -370,7 +603,6 @@
             container.innerHTML = html;
         }
 
-        // Initial render
         render();
     })();
     </script>

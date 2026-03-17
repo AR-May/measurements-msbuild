@@ -61,6 +61,16 @@ foreach ($dateDir in $dateDirs) {
                     }
                 }
 
+                # Skip records with non-zero exit code (failed builds)
+                $exitCode = $null
+                if ($results.PSObject.Properties['exit-code']) {
+                    $exitCode = $results.'exit-code'
+                }
+                if ($null -ne $exitCode -and $exitCode -ne 0) {
+                    Write-Verbose "Skipping $testName ($date/$machine): exit-code=$exitCode"
+                    continue
+                }
+
                 $records.Add([PSCustomObject]@{
                     date      = $date
                     machine   = $machine
@@ -76,6 +86,6 @@ foreach ($dateDir in $dateDirs) {
     }
 }
 
-$records | ConvertTo-Json -Depth 3 -Compress | Set-Content -Path $OutFile -Encoding UTF8
+$records | ConvertTo-Json -Depth 3 | Set-Content -Path $OutFile -Encoding UTF8
 
 Write-Host "Wrote $($records.Count) records to $OutFile" -ForegroundColor Green

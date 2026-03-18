@@ -6,10 +6,12 @@
     Retrieves CrankAssetsPERFLIN and CrankAssetsPERFWIN artifacts from the MSBuild
     performance pipeline (definition 25429) and copies JSON files into the data/main/ folder.
 
-    All builds that produced perf artifacts are included regardless of overall pipeline
-    result (some tests fail while perf data is still valid).
+    Only builds from the main branch are fetched (test runs from other branches are
+    excluded). All main-branch builds that produced perf artifacts are included regardless
+    of overall pipeline result (some tests fail while perf data is still valid).
 
-    Already-downloaded dates are skipped, so the script is safe to re-run incrementally.
+    Data is organized by build date sequence (e.g. data/main/20260223.1/PERFWIN/).
+    Already-downloaded builds are skipped, so the script is safe to re-run incrementally.
 
 .PARAMETER DataDir
     Destination folder for JSON files. Default: data/main/ under the repo root.
@@ -38,6 +40,7 @@ Write-Host "Fetching all builds from pipeline $DefinitionId ..." -ForegroundColo
 # If the pipeline ever exceeds 500 builds, add pagination via --continuation-token.
 $builds = az pipelines build list `
     --definition-ids $DefinitionId `
+    --branch refs/heads/main `
     --top 500 `
     --query "[].{id:id, buildNumber:buildNumber, result:result}" `
     -o json 2>&1 | ConvertFrom-Json

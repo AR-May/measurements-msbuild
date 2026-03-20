@@ -346,6 +346,180 @@
             .layout { flex-direction: column; }
             .sidebar { flex: none; }
             .compare-controls { flex-direction: column; }
+            .health-filters { flex-direction: column; }
+        }
+
+        /* Health tab */
+        .health-layout {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .health-filters {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .health-filter-group { flex: 1; min-width: 200px; }
+        .health-filter-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+        .health-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+        }
+        .health-search:focus { border-color: var(--accent); }
+        .health-search::placeholder { color: var(--text-subtle); }
+        .health-show-toggle { display: flex; gap: 6px; }
+        .health-show-toggle .metric-btn { padding: 8px 14px; font-size: 13px; }
+        .health-table-scroll { max-height: 600px; overflow-y: auto; }
+        .status-dot {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-pass { background: var(--success); }
+        .status-partial { background: var(--warning); }
+        .status-fail { background: var(--danger); }
+        .health-run-row { cursor: pointer; transition: background 0.1s; }
+        .health-run-row:hover td { background: var(--surface-raised); }
+        .health-run-row.expanded td { background: var(--surface-raised); border-bottom-color: transparent; }
+        .health-run-detail td {
+            background: var(--bg);
+            padding: 0 !important;
+        }
+        .health-run-detail-inner {
+            padding: 8px 14px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .health-run-detail-inner .fail-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .fail-chip {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(248,81,73,0.15);
+            color: var(--danger);
+        }
+        .streak-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--danger);
+            opacity: 0.8;
+        }
+
+        /* Timeline heatmap */
+        .timeline-wrapper {
+            overflow-x: auto;
+            padding: 16px;
+        }
+        .timeline-grid {
+            display: table;
+            border-collapse: collapse;
+            min-width: 100%;
+        }
+        .timeline-row {
+            display: table-row;
+        }
+        .timeline-label {
+            display: table-cell;
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: var(--surface);
+            padding: 4px 12px 4px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            vertical-align: middle;
+            border-right: 1px solid var(--border);
+            min-width: 200px;
+        }
+        .timeline-label .tl-machine {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+        .timeline-cell {
+            display: table-cell;
+            padding: 3px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .timeline-dot {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid transparent;
+            cursor: default;
+            transition: transform 0.1s;
+        }
+        .timeline-dot:hover {
+            transform: scale(1.4);
+            z-index: 3;
+            position: relative;
+        }
+        .tl-pass { background: var(--success); border-color: rgba(63,185,80,0.4); }
+        .tl-fail { background: var(--danger); border-color: rgba(248,81,73,0.4); }
+        .tl-unknown { background: var(--text-subtle); opacity: 0.3; border-color: var(--border); }
+        .tl-none { background: transparent; border: 1px dashed var(--border); opacity: 0.3; }
+        .timeline-header-cell {
+            display: table-cell;
+            padding: 3px;
+            vertical-align: bottom;
+            text-align: center;
+        }
+        .timeline-header-text {
+            font-size: 9px;
+            color: var(--text-subtle);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            white-space: nowrap;
+            max-height: 80px;
+            overflow: hidden;
+        }
+        .timeline-legend {
+            display: flex;
+            gap: 16px;
+            padding: 10px 0 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .timeline-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .timeline-legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -358,6 +532,7 @@
     <div class="view-tabs">
         <button class="view-tab active" data-view="overview">Overview</button>
         <button class="view-tab" data-view="comparison">Comparison</button>
+        <button class="view-tab" data-view="health">Health</button>
     </div>
 
     <!-- ==================== OVERVIEW VIEW ==================== -->
@@ -446,22 +621,74 @@
         </div>
     </div>
 
+    <!-- ==================== HEALTH VIEW ==================== -->
+    <div class="view-container" id="view-health">
+        <div class="health-layout">
+            <div class="card">
+                <div class="card-header">Filters</div>
+                <div class="card-body">
+                    <div class="health-filters">
+                        <div class="health-filter-group">
+                            <label class="health-filter-label">Branch</label>
+                            <select class="control-select" id="healthBranch"></select>
+                        </div>
+                        <div class="health-filter-group">
+                            <label class="health-filter-label">Test</label>
+                            <input type="text" class="health-search" id="healthTestSearch" placeholder="Filter by test name…">
+                        </div>
+                        <div class="health-filter-group">
+                            <label class="health-filter-label">Show</label>
+                            <div class="health-show-toggle" id="healthShowToggle">
+                                <button class="metric-btn active" data-show="failures">❌ Failures Only</button>
+                                <button class="metric-btn" data-show="all">📋 All Runs</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Pipeline Runs</div>
+                <div class="stats-bar" id="healthStatsBar"></div>
+                <div class="table-wrapper health-table-scroll" id="healthRunsContainer"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="healthTimelineHeader">Test Status Timeline</div>
+                <div class="timeline-wrapper" id="healthTimelineContainer"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="healthStreaksHeader">Current Failure Streaks</div>
+                <div class="table-wrapper" id="healthStreaksContainer"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="healthDetailHeader">Failure Details</div>
+                <div class="table-wrapper health-table-scroll" id="healthDetailContainer"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
     (async function() {
         const resp = await fetch('data.json?v=' + Date.now());
         const allData = await resp.json();
 
-        // Derived collections
-        const branches = [...new Set(allData.map(r => r.branch))].sort((a, b) => {
+        // Perf data: only successful runs (exitCode === 0 or null/undefined for backwards compat)
+        const perfData = allData.filter(r => r.exitCode === 0 || r.exitCode == null || r.exitCode === undefined);
+
+        // Derived collections (from perfData for perf views)
+        const branches = [...new Set(perfData.map(r => r.branch))].sort((a, b) => {
             if (a === 'main') return -1;
             if (b === 'main') return 1;
             return a.localeCompare(b);
         });
-        const allMachines = [...new Set(allData.map(r => r.machine))].sort();
+        const allMachines = [...new Set(perfData.map(r => r.machine))].sort();
 
-        // Index: branch -> buildId -> array of records
+        // Index: branch -> buildId -> array of records (perf data only)
         const idx = {};
-        allData.forEach(r => {
+        perfData.forEach(r => {
             if (!idx[r.branch]) idx[r.branch] = {};
             if (!idx[r.branch][r.buildId]) idx[r.branch][r.buildId] = [];
             idx[r.branch][r.buildId].push(r);
@@ -472,7 +699,7 @@
         }
 
         function testsForBranch(branch) {
-            const recs = allData.filter(r => r.branch === branch);
+            const recs = perfData.filter(r => r.branch === branch);
             return [...new Set(recs.map(r => r.test))].sort();
         }
 
@@ -542,7 +769,7 @@
             testList.innerHTML = '';
             const branch = branchSelect.value;
             const tests = testsForBranch(branch);
-            const branchData = allData.filter(r => r.branch === branch);
+            const branchData = perfData.filter(r => r.branch === branch);
             const testMachines = {};
             branchData.forEach(r => {
                 if (!testMachines[r.test]) testMachines[r.test] = new Set();
@@ -604,7 +831,7 @@
             const metricLabel = metric === 'buildTime' ? 'Build Time' : 'Eval Time';
             document.getElementById('chartTitle').textContent = `${metricLabel} — ${branch}`;
 
-            const branchData = allData.filter(r => r.branch === branch && selectedTests.includes(r.test));
+            const branchData = perfData.filter(r => r.branch === branch && selectedTests.includes(r.test));
             const buildIds = [...new Set(branchData.map(r => r.buildId))].sort();
             const machines = [...new Set(branchData.map(r => r.machine))].sort();
 
@@ -885,10 +1112,287 @@
             container.innerHTML = html;
         }
 
+        // ==================== HEALTH ====================
+        const healthBranch = document.getElementById('healthBranch');
+        const healthTestSearch = document.getElementById('healthTestSearch');
+        let healthShowMode = 'failures';
+
+        // All branches from allData (not just perfData)
+        const allBranches = [...new Set(allData.map(r => r.branch))].sort((a, b) => {
+            if (a === 'main') return -1;
+            if (b === 'main') return 1;
+            return a.localeCompare(b);
+        });
+
+        allBranches.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b; opt.textContent = b;
+            if (b === 'main') opt.selected = true;
+            healthBranch.appendChild(opt);
+        });
+
+        const healthShowBtns = document.querySelectorAll('#healthShowToggle .metric-btn');
+        healthShowBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                healthShowBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                healthShowMode = btn.dataset.show;
+                renderHealth();
+            });
+        });
+        healthBranch.addEventListener('change', renderHealth);
+        healthTestSearch.addEventListener('input', renderHealth);
+
+        function renderHealth() {
+            const branch = healthBranch.value;
+            const testFilter = healthTestSearch.value.toLowerCase();
+            const branchRecs = allData.filter(r => r.branch === branch);
+
+            // Group by buildId
+            const buildMap = {};
+            branchRecs.forEach(r => {
+                if (!buildMap[r.buildId]) buildMap[r.buildId] = [];
+                buildMap[r.buildId].push(r);
+            });
+            const buildIds = Object.keys(buildMap).sort().reverse();
+
+            // --- Stats ---
+            const totalRuns = branchRecs.length;
+            const failedRuns = branchRecs.filter(r => r.exitCode != null && r.exitCode !== 0).length;
+            const passedRuns = branchRecs.filter(r => r.exitCode === 0).length;
+            const unknownRuns = branchRecs.filter(r => r.exitCode == null).length;
+            const failRate = totalRuns > 0 ? (failedRuns / totalRuns * 100) : 0;
+
+            const statsBar = document.getElementById('healthStatsBar');
+            statsBar.innerHTML = `
+                <div class="stat"><div class="stat-value">${buildIds.length}</div><div class="stat-label">Builds</div></div>
+                <div class="stat"><div class="stat-value">${totalRuns}</div><div class="stat-label">Total Runs</div></div>
+                <div class="stat"><div class="stat-value" style="color:var(--success)">${passedRuns}</div><div class="stat-label">Passed</div></div>
+                <div class="stat"><div class="stat-value" style="color:var(--danger)">${failedRuns}</div><div class="stat-label">Failed</div></div>
+                <div class="stat"><div class="stat-value" style="color:var(--text-subtle)">${unknownRuns}</div><div class="stat-label">Unknown</div></div>
+                <div class="stat"><div class="stat-value" style="color:${failRate > 10 ? 'var(--danger)' : failRate > 0 ? 'var(--warning)' : 'var(--success)'}">${failRate.toFixed(1)}%</div><div class="stat-label">Failure Rate</div></div>`;
+
+            // --- Pipeline Runs Table ---
+            const runsContainer = document.getElementById('healthRunsContainer');
+            if (buildIds.length === 0) {
+                runsContainer.innerHTML = '<div class="empty-state"><span class="icon">🔍</span>No data for this branch.</div>';
+            } else {
+                let html = '<table><thead><tr><th>Build</th><th>Total</th><th>✅ Passed</th><th>❌ Failed</th><th>Status</th></tr></thead><tbody>';
+
+                buildIds.forEach(bid => {
+                    const recs = buildMap[bid];
+                    const passed = recs.filter(r => r.exitCode === 0).length;
+                    const failed = recs.filter(r => r.exitCode != null && r.exitCode !== 0).length;
+                    const unknown = recs.filter(r => r.exitCode == null).length;
+                    const total = recs.length;
+
+                    let statusDot, statusText;
+                    if (failed === 0 && unknown === 0) { statusDot = 'status-pass'; statusText = 'All Pass'; }
+                    else if (failed === 0) { statusDot = 'status-pass'; statusText = `Pass (${unknown} unknown)`; }
+                    else if (passed === 0) { statusDot = 'status-fail'; statusText = 'All Failed'; }
+                    else { statusDot = 'status-partial'; statusText = `${failed} failed`; }
+
+                    if (healthShowMode === 'failures' && failed === 0) return;
+
+                    const failedTests = recs.filter(r => r.exitCode != null && r.exitCode !== 0);
+                    const failChips = failedTests.map(r =>
+                        `<span class="fail-chip">${r.test} (${r.machine})</span>`
+                    ).join('');
+
+                    html += `<tr class="health-run-row" onclick="this.classList.toggle('expanded');this.nextElementSibling.style.display=this.classList.contains('expanded')?'table-row':'none'">
+                        <td>${formatBuildId(bid)}</td>
+                        <td>${total}</td>
+                        <td style="color:var(--success)">${passed}</td>
+                        <td style="color:${failed > 0 ? 'var(--danger)' : 'var(--text-subtle)'}">${failed}</td>
+                        <td><span class="status-dot ${statusDot}"></span>${statusText}</td>
+                    </tr>`;
+                    html += `<tr class="health-run-detail" style="display:none"><td colspan="5">
+                        <div class="health-run-detail-inner">
+                            ${failed > 0 ? '<strong>Failed tests:</strong><div class="fail-list">' + failChips + '</div>' : '<em>No failures in this build.</em>'}
+                        </div>
+                    </td></tr>`;
+                });
+
+                html += '</tbody></table>';
+                runsContainer.innerHTML = html;
+            }
+
+            // --- Test Status Timeline ---
+            const timelineContainer = document.getElementById('healthTimelineContainer');
+            const timelineHeader = document.getElementById('healthTimelineHeader');
+            const sortedBuildIds = Object.keys(buildMap).sort();
+
+            // Collect all test+machine combos (filtered)
+            const tlPairs = {};
+            branchRecs.forEach(r => {
+                if (testFilter && !r.test.toLowerCase().includes(testFilter)) return;
+                const key = `${r.test}|||${r.machine}`;
+                if (!tlPairs[key]) tlPairs[key] = { test: r.test, machine: r.machine };
+            });
+            const tlPairList = Object.values(tlPairs).sort((a, b) =>
+                a.test.localeCompare(b.test) || a.machine.localeCompare(b.machine)
+            );
+
+            timelineHeader.textContent = `Test Status Timeline (${tlPairList.length} tests × ${sortedBuildIds.length} builds)`;
+
+            if (tlPairList.length === 0 || sortedBuildIds.length === 0) {
+                timelineContainer.innerHTML = '<div class="empty-state"><span class="icon">📊</span>No data to display.</div>';
+            } else {
+                // Build a lookup: key -> buildId -> record
+                const tlLookup = {};
+                branchRecs.forEach(r => {
+                    const key = `${r.test}|||${r.machine}`;
+                    if (!tlLookup[key]) tlLookup[key] = {};
+                    tlLookup[key][r.buildId] = r;
+                });
+
+                let tlHtml = '<div class="timeline-legend">';
+                tlHtml += '<div class="timeline-legend-item"><div class="timeline-legend-dot tl-pass"></div> Pass</div>';
+                tlHtml += '<div class="timeline-legend-item"><div class="timeline-legend-dot tl-fail"></div> Fail</div>';
+                tlHtml += '<div class="timeline-legend-item"><div class="timeline-legend-dot tl-unknown" style="opacity:0.6"></div> Unknown</div>';
+                tlHtml += '<div class="timeline-legend-item"><div class="timeline-legend-dot tl-none"></div> No data</div>';
+                tlHtml += '</div>';
+
+                tlHtml += '<div class="timeline-grid">';
+
+                // Header row with build IDs
+                tlHtml += '<div class="timeline-row"><div class="timeline-label" style="border-bottom:1px solid var(--border)"></div>';
+                sortedBuildIds.forEach(bid => {
+                    const d = parseDate(bid);
+                    const label = `${d.getMonth()+1}/${d.getDate()} #${bid.split('.')[1]}`;
+                    tlHtml += `<div class="timeline-header-cell"><div class="timeline-header-text">${label}</div></div>`;
+                });
+                tlHtml += '</div>';
+
+                // Data rows
+                tlPairList.forEach(({ test, machine }) => {
+                    const key = `${test}|||${machine}`;
+                    tlHtml += '<div class="timeline-row">';
+                    tlHtml += `<div class="timeline-label">${test} <span class="tl-machine">${machine}</span></div>`;
+                    sortedBuildIds.forEach(bid => {
+                        const rec = tlLookup[key]?.[bid];
+                        let cls, title;
+                        if (!rec) {
+                            cls = 'tl-none';
+                            title = `${test} (${machine}) — ${formatBuildId(bid)}: No data`;
+                        } else if (rec.exitCode === 0) {
+                            cls = 'tl-pass';
+                            title = `${test} (${machine}) — ${formatBuildId(bid)}: ✅ Pass`;
+                        } else if (rec.exitCode != null && rec.exitCode !== 0) {
+                            cls = 'tl-fail';
+                            title = `${test} (${machine}) — ${formatBuildId(bid)}: ❌ Failed (exit ${rec.exitCode})`;
+                        } else {
+                            cls = 'tl-unknown';
+                            title = `${test} (${machine}) — ${formatBuildId(bid)}: Unknown exit code`;
+                        }
+                        tlHtml += `<div class="timeline-cell"><div class="timeline-dot ${cls}" title="${title}"></div></div>`;
+                    });
+                    tlHtml += '</div>';
+                });
+
+                tlHtml += '</div>';
+                timelineContainer.innerHTML = tlHtml;
+            }
+
+            // --- Failure Streaks ---
+            // For each test+machine, find consecutive failures from the most recent build backwards
+            const streaksContainer = document.getElementById('healthStreaksContainer');
+            const testMachinePairs = {};
+            branchRecs.forEach(r => {
+                const key = `${r.test}|||${r.machine}`;
+                if (!testMachinePairs[key]) testMachinePairs[key] = { test: r.test, machine: r.machine };
+            });
+
+            const streaks = [];
+            Object.values(testMachinePairs).forEach(({ test, machine }) => {
+                if (testFilter && !test.toLowerCase().includes(testFilter)) return;
+                // Walk builds from newest to oldest
+                const sortedBids = Object.keys(buildMap).sort().reverse();
+                let streakCount = 0;
+                let streakStart = null, streakEnd = null;
+                let foundAny = false;
+
+                for (const bid of sortedBids) {
+                    const rec = buildMap[bid].find(r => r.test === test && r.machine === machine);
+                    if (!rec) continue;
+                    foundAny = true;
+                    if (rec.exitCode != null && rec.exitCode !== 0) {
+                        streakCount++;
+                        if (!streakStart) streakStart = bid;
+                        streakEnd = bid;
+                    } else {
+                        break;
+                    }
+                }
+                if (streakCount > 0) {
+                    streaks.push({ test, machine, count: streakCount, from: streakEnd, to: streakStart });
+                }
+            });
+
+            streaks.sort((a, b) => b.count - a.count);
+
+            const streaksHeader = document.getElementById('healthStreaksHeader');
+            streaksHeader.textContent = `Current Failure Streaks (${streaks.length})`;
+
+            if (streaks.length === 0) {
+                streaksContainer.innerHTML = '<div class="empty-state"><span class="icon">✅</span>No currently failing tests!</div>';
+            } else {
+                const maxStreak = Math.max(...streaks.map(s => s.count));
+                let html = '<table><thead><tr><th>Test</th><th>Machine</th><th>Consecutive Failures</th><th>Since</th><th>Latest</th><th></th></tr></thead><tbody>';
+                streaks.forEach(s => {
+                    const barWidth = Math.max(10, (s.count / maxStreak) * 100);
+                    html += `<tr>
+                        <td>${s.test}</td>
+                        <td>${s.machine}</td>
+                        <td style="color:var(--danger);font-weight:700">${s.count}</td>
+                        <td>${formatBuildId(s.from)}</td>
+                        <td>${formatBuildId(s.to)}</td>
+                        <td style="width:120px"><div class="streak-bar" style="width:${barWidth}%"></div></td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                streaksContainer.innerHTML = html;
+            }
+
+            // --- Failure Details ---
+            const detailContainer = document.getElementById('healthDetailContainer');
+            let failures = branchRecs.filter(r => r.exitCode != null && r.exitCode !== 0);
+            if (testFilter) {
+                failures = failures.filter(r => r.test.toLowerCase().includes(testFilter));
+            }
+            failures.sort((a, b) => {
+                const bidCmp = b.buildId.localeCompare(a.buildId);
+                if (bidCmp !== 0) return bidCmp;
+                const testCmp = a.test.localeCompare(b.test);
+                if (testCmp !== 0) return testCmp;
+                return a.machine.localeCompare(b.machine);
+            });
+
+            const detailHeader = document.getElementById('healthDetailHeader');
+            detailHeader.textContent = `Failure Details (${failures.length})`;
+
+            if (failures.length === 0) {
+                detailContainer.innerHTML = '<div class="empty-state"><span class="icon">✅</span>No failures found.</div>';
+            } else {
+                let html = '<table><thead><tr><th>Build</th><th>Test</th><th>Machine</th><th>Exit Code</th></tr></thead><tbody>';
+                failures.forEach(r => {
+                    html += `<tr>
+                        <td>${formatBuildId(r.buildId)}</td>
+                        <td>${r.test}</td>
+                        <td>${r.machine}</td>
+                        <td style="color:var(--danger);font-weight:600">${r.exitCode}</td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                detailContainer.innerHTML = html;
+            }
+        }
+
         // Initial render
         rebuildTestList();
         renderOverview();
         renderComparison();
+        renderHealth();
     })();
     </script>
 </body>

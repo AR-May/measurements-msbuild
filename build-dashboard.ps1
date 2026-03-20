@@ -51,15 +51,9 @@ foreach ($branchDir in $branchDirs) {
                     $json = Get-Content $jsonFile.FullName -Raw | ConvertFrom-Json
                     $results = $json.jobResults.jobs.application.results
 
-                    # Skip records with non-zero exit code (failed builds)
                     $exitCode = $null
                     if ($results.PSObject.Properties['exit-code']) {
                         $exitCode = $results.'exit-code'
-                    }
-                    if ($null -ne $exitCode -and $exitCode -ne 0) {
-                        Write-Verbose "Skipping $testName ($branch/$buildId/$machine): exit-code=$exitCode"
-                        $skipped++
-                        continue
                     }
 
                     $buildTime = $null
@@ -78,6 +72,10 @@ foreach ($branchDir in $branchDirs) {
                         }
                     }
 
+                    if ($null -ne $exitCode -and $exitCode -ne 0) {
+                        $skipped++
+                    }
+
                     $records.Add([PSCustomObject]@{
                         branch    = $branch
                         buildId   = $buildId
@@ -85,6 +83,7 @@ foreach ($branchDir in $branchDirs) {
                         test      = $testName
                         buildTime = $buildTime
                         evalTime  = $evalTime
+                        exitCode  = $exitCode
                     })
                 }
                 catch {

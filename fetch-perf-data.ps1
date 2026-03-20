@@ -16,12 +16,17 @@
 .PARAMETER DataDir
     Destination folder for JSON files. Default: data/main/ under the repo root.
 
+.PARAMETER Days
+    Only fetch builds from the last N days. Default: 0 (all builds).
+
 .EXAMPLE
     .\fetch-perf-data.ps1
+    .\fetch-perf-data.ps1 -Days 7
 #>
 [CmdletBinding()]
 param(
-    [string]$DataDir = (Join-Path $PSScriptRoot "data" "main")
+    [string]$DataDir = (Join-Path $PSScriptRoot "data" "main"),
+    [int]$Days = 0
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,10 +36,17 @@ $Project      = "DevDiv"
 $DefinitionId = 25429
 $ArtifactNames = @("CrankAssetsPERFLIN", "CrankAssetsPERFWIN")
 
+# Compute cutoff date if Days is specified
+$cutoffDate = $null
+if ($Days -gt 0) {
+    $cutoffDate = (Get-Date).AddDays(-$Days).ToString("yyyyMMdd")
+    Write-Host "Filtering to builds from the last $Days days (>= $cutoffDate)" -ForegroundColor Cyan
+}
+
 # Ensure az devops defaults are configured
 az devops configure --defaults organization=$Organization project=$Project 2>&1 | Out-Null
 
-Write-Host "Fetching all builds from pipeline $DefinitionId ..." -ForegroundColor Cyan
+Write-Host "Fetching builds from pipeline $DefinitionId ..." -ForegroundColor Cyan
 
 # az pipelines build list caps at 500 per call, which is enough for this pipeline.
 # If the pipeline ever exceeds 500 builds, add pagination via --continuation-token.
@@ -58,6 +70,15 @@ foreach ($build in $builds) {
     $buildId = $build.id
     # Extract date.seq from buildNumber (format: YYYYMMDD.N.s_...)
     $buildDateSeq = $build.buildNumber -replace '^(\d{8}\.\d+)\..*', '$1'
+
+    # Skip builds older than cutoff
+    if ($cutoffDate) {
+        $buildDate = $buildDateSeq -replace '\..*', ''
+        if ($buildDate -lt $cutoffDate) {
+            Write-Host "  [skip] $buildDateSeq older than $Days days" -ForegroundColor DarkGray
+            continue
+        }
+    }
 
     # List artifacts for this build
     $artifacts = az pipelines runs artifact list `
